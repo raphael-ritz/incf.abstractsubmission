@@ -17,18 +17,49 @@ from incf.abstractsubmission.config import PROJECTNAME
 AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     ateapi.FormattableNamesField('authors',
+                                 subfields=('firstnames', 
+                                            'lastname', 
+                                            'email',
+                                            'affiliation',
+                                            ),
+                                 subfield_sizes={'firstnames': 15,
+                                                 'lastname': 20,
+                                                 'email': 20,
+                                                 'affiliation': 20,
+                                                 },
+                                 minimalSize=5,
                                 ),
-    atapi.TextField('abstract'),
+    atapi.TextField('abstract',
+                    searchable=1,
+                    primary=1,
+                    default_output_type='text/x-html-safe',
+                    allowable_content_types=('text/plain',
+                                             'text/structured',
+                                             'text/html'),
+                    widget=atapi.RichWidget(
+                #label='Research Focus',
+                rows=20,
+                #description="The research focus of this group.",
+    ),
+                    ),
     atapi.StringField('presentationFormat',
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
                                                     ('Demo', 'Demo'))),
                       default='Poster',
                       widget=atapi.SelectionWidget(format="radio"),
                       ),
+    atapi.TextField('whyDemo',
+                    widget=atapi.TextAreaWidget(label="Why Demo?",
+                                                description="If you have "\
+                    "choosen 'Demo' above: Please give a brief explanation "\
+                    "why your contribution would benefit from being demonstrated "\
+                    "live rather than by a regular poster presentation.",
+                                                ),
+                    ),
     atapi.LinesField('topics',
                      multivalued=1,
                      vocabulary='getTopics',
-                     widget=atapi.MultiSelectionWidget(),
+                     widget=atapi.MultiSelectionWidget(format="checkbox"),
                      ),
 ))
 
@@ -37,6 +68,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
 AbstractSchema['title'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].storage = atapi.AnnotationStorage()
+AbstractSchema['description'].schemata = 'categorization'
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 
