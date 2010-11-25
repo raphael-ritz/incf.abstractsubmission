@@ -85,9 +85,9 @@ class Abstract(base.ATCTContent):
 
     def getTopics(self):
         """Available scientific categories"""
-        return atapi.DisplayList((('Topic1','Topic1'),
-                                  ('Topic2','Topic2'),
-                                  )
-                                 )
+        terms = self.aq_parent.getTopics()
+        vocab = [(term, term) for term in terms]
+        return atapi.DisplayList(vocab)
+
 
 atapi.registerType(Abstract, PROJECTNAME)
