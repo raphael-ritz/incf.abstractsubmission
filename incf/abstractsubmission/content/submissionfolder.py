@@ -12,7 +12,7 @@ from Products.ATContentTypes.content import schemata
 from incf.abstractsubmission.interfaces import ISubmissionFolder
 from incf.abstractsubmission.config import PROJECTNAME
 
-SubmissionFolderSchema = folder.ATFolderSchema.copy() + atapi.Schema((
+SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
 
     # -*- Your Archetypes field definitions here ... -*-
 
@@ -31,7 +31,7 @@ schemata.finalizeATCTSchema(
 )
 
 
-class SubmissionFolder(folder.ATFolder):
+class SubmissionFolder(folder.ATBTreeFolder):
     """Container for Abstract submissions"""
     implements(ISubmissionFolder)
 
