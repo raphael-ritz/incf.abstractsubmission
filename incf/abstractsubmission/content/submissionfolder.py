@@ -16,6 +16,9 @@ SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
 
     atapi.LinesField('topics',
                      default_method="getDefaultTopics",
+                     widget=atapi.LinesWidget(description="Define the terms "\
+                     "to be offered for the abstract classification here. "\
+                     "One term per line."),
                      ),
 
 ))
