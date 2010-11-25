@@ -28,6 +28,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                                  'affiliation': 20,
                                                  },
                                  minimalSize=5,
+                                 default_method='defaultAuthor',
                                 ),
     atapi.TextField('abstract',
                     searchable=1,
@@ -88,6 +89,15 @@ class Abstract(base.ATCTContent):
         terms = self.aq_parent.getTopics()
         vocab = [(term, term) for term in terms]
         return atapi.DisplayList(vocab)
+
+    def defaultAuthor(self):
+        """Return data of current user as default for first author"""
+        #XXX TODO
+        return [{'firstnames': '(your first name)',
+                 'lastname': '(your last name)',
+                 'email': 'you@somewhere.com',
+                 'affiliation': 'Some Great Place',
+                 },]
 
 
 atapi.registerType(Abstract, PROJECTNAME)
