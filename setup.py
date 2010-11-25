@@ -56,6 +56,7 @@ setup(name='incf.abstractsubmission',
       zip_safe=False,
       install_requires=['setuptools',
                         # -*- Extra requirements: -*-
+                        'Products.ATExtensions',
                         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
