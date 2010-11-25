@@ -14,7 +14,9 @@ from incf.abstractsubmission.config import PROJECTNAME
 
 SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
 
-    # -*- Your Archetypes field definitions here ... -*-
+    atapi.LinesField('topics',
+                     default_method="getDefaultTopics",
+                     ),
 
 ))
 
@@ -41,6 +43,19 @@ class SubmissionFolder(folder.ATBTreeFolder):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
 
-    # -*- Your ATSchema to Python Property Bridges Here ... -*-
+    def getDefaultTopics(self):
+        """Hard coded list of default topics"""
+        return ('General neuroinformatics',
+                'Computational neuroscience',
+                'Digital atlasing',
+                'Neuroimaging',
+                'Genomics and genetics',
+                'Large scale modeling',
+                'Neuromorphic engineering',
+                'Brain machine interface',
+                'Electrophysiology',
+                'Infrastructural and portal services',
+                'Clinical neuroscience',
+                )
 
 atapi.registerType(SubmissionFolder, PROJECTNAME)
