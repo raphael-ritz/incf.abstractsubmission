@@ -74,6 +74,13 @@ AbstractSchema['description'].schemata = 'categorization'
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 
 
+# hide away some fields for the time being
+for field in AbstractSchema.fields():
+    if field.schemata != 'default':
+        field.widget.visible =  {'view': 'invisible', 'edit': 'invisible'}
+
+
+
 class Abstract(base.ATCTContent):
     """Abstract Submission"""
     implements(IAbstract)
