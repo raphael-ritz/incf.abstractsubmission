@@ -47,7 +47,9 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
                                                     ('Demo', 'Demo'))),
                       default='Poster',
-                      widget=atapi.SelectionWidget(format="radio"),
+                      widget=atapi.SelectionWidget(labael="Preferred "\
+                                                   "Presentation Format",
+                                                   format="radio"),
                       ),
     atapi.TextField('whyDemo',
                     widget=atapi.TextAreaWidget(label="Why Demo?",
@@ -57,10 +59,9 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     "live rather than by a regular poster presentation.",
                                                 ),
                     ),
-    atapi.LinesField('topics',
-                     multivalued=1,
+    atapi.StringField('topic',
                      vocabulary='getTopics',
-                     widget=atapi.MultiSelectionWidget(format="checkbox"),
+                     widget=atapi.SelectionWidget(format="checkbox"),
                      ),
 ))
 
