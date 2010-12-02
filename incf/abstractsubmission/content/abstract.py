@@ -49,6 +49,11 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                 #description="The research focus of this group.",
     ),
                     ),
+    atapi.ImageField('image'),
+    atapi.StringField('imageCaption',
+                      widget=atapi.TextAreaWidget(label="Image Caption",
+                                                  rows=3),
+                      ),
     atapi.StringField('presentationFormat',
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
                                                     ('Demo', 'Demo'))),
@@ -68,7 +73,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('topic',
                       vocabulary='getTopics',
                       required=1,
-                      widget=atapi.SelectionWidget(format="checkbox"),
+                      widget=atapi.SelectionWidget(format="radio"),
                       ),
 ))
 
@@ -78,6 +83,8 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 AbstractSchema['title'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].schemata = 'categorization'
+AbstractSchema['image'].widget.description = "An optional image to be "\
+    "displayed following the text (recommended size: ??x??)"
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 
