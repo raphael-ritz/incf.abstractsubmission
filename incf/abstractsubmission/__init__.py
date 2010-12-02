@@ -13,6 +13,16 @@ from Products.CMFCore import utils
 
 abstractsubmissionMessageFactory = MessageFactory('incf.abstractsubmission')
 
+# patch CMFDefault.Document to not acquire a UID
+# or CMF Discussion Items will go wild
+from Products.CMFDefault.Document import Document
+
+def UID(self):
+    return None
+
+Document.UID = UID
+# end of patch
+
 
 def initialize(context):
     """Initializer called when used as a Zope 2 product.
