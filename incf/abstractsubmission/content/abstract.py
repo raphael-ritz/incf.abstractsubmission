@@ -54,6 +54,9 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       widget=atapi.TextAreaWidget(label="Image Caption",
                                                   rows=3),
                       ),
+#    atapi.ComputedField('size',
+#                        expression="object/getTextSize",
+#                        ),
     atapi.StringField('presentationFormat',
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
                                                     ('Demo', 'Demo'))),
@@ -120,6 +123,10 @@ class Abstract(base.ATCTContent):
                  'email': 'you@somewhere.com',
                  'affiliation': 'Some Great Place',
                  },]
+
+    def getTextSize(self):
+        """Number of characters of abstract"""
+        return len(self.getAbstract(mimetype="text/plain"))
 
 
 atapi.registerType(Abstract, PROJECTNAME)
