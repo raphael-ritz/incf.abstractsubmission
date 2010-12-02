@@ -109,6 +109,22 @@ class Abstract(base.ATCTContent):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
 
+    def Description(self):
+        """Override description accessor to return author list"""
+        return self.formatAuthors()
+    
+    def formatAuthors(self, separator = "<br />"):
+        
+        authors = self.getAuthors()
+        strings = []
+        for author in authors:
+            strings.append("%s %s (%s, %s)" % (author.get('firstnames'),
+                                               author.get('lastname'),
+                                               author.get('email'),
+                                               author.get('affiliation'),
+                                               ))
+        return separator.join(strings)
+
     def getTopics(self):
         """Available scientific categories"""
         terms = self.aq_parent.getTopics()

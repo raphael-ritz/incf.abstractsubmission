@@ -1,6 +1,8 @@
 """Definition of the SubmissionFolder content type
 """
 
+from StringIO import StringIO
+
 from zope.interface import implements
 
 from Products.Archetypes import atapi
@@ -13,7 +15,9 @@ from incf.abstractsubmission.interfaces import ISubmissionFolder
 from incf.abstractsubmission.config import PROJECTNAME
 
 SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
-
+    atapi.TextField('introduction',
+                    widget=atapi.RichWidget(),
+                    ),
     atapi.LinesField('topics',
                      default_method="getDefaultTopics",
                      widget=atapi.LinesWidget(description="Define the terms "\
@@ -60,5 +64,35 @@ class SubmissionFolder(folder.ATBTreeFolder):
                 'Infrastructural and portal services',
                 'Clinical neuroscience',
                 )
+
+    def csv(self, delimiter='|', newline='\n\r'):
+        """Export abstracts in csv format"""
+        abstracts = self.contentValues()
+        fields = ['firstnames',
+                  'lastname',
+                  'email',
+                  'affiliation',
+                  'format',
+                  #'abstract',
+                  ]
+        out = StringIO()
+        out.write(delimiter.join(fields) + newline)
+        for abstract in abstracts:
+            values = [abstract.getAuthors()[0].get('firstnames'),
+                      abstract.getAuthors()[0].get('lastname'),
+                      abstract.getAuthors()[0].get('email'),
+                      abstract.getAuthors()[0].get('affiliation'),
+                      abstract.getPresentationFormat(),
+                      #abstract.getAbstract(),
+                      ]
+            out.write(delimiter.join(values) + newline)
+        value = out.getvalue()
+        out.close()
+        self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-msexcel')
+        self.REQUEST.RESPONSE.setHeader("Content-Disposition", 
+                                        "inline;filename=congress2010abstracts.csv")
+
+        return value
+                      
 
 atapi.registerType(SubmissionFolder, PROJECTNAME)
