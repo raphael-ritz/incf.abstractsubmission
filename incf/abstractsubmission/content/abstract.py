@@ -10,6 +10,7 @@ from Products.ATContentTypes.content import base
 from Products.ATContentTypes.content import schemata
 
 from Products.ATExtensions import ateapi
+from Products.ATExtensions.Extensions.utils import getDisplayList
 
 # -*- Message Factory Imported Here -*-
 
@@ -23,17 +24,20 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                    'lastname', 
                                    'email',
                                    'affiliation',
+                                   'country',
                                    ),
                         required_subfields=('firstnames', 
                                             'lastname', 
                                             'email',
                                             'affiliation',
+                                            'country',
                                             ),
                         subfield_sizes={'firstnames': 15,
                                         'lastname': 20,
                                         'email': 20,
                                         'affiliation': 20,
                                         },
+                        subfield_vocabularies={'country':'CountryNames'},
                         minimalSize=5,
                         default_method='defaultAuthor',
                         ),
@@ -82,7 +86,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       ),
     atapi.StringField('sessionType',
                       vocabulary='getSessionTypes',
-                      default='Poster',
+                      default='Poster Session',
                       write_permission=ReviewPortalContent,
                       widget=atapi.SelectionWidget(format="radio"),
                       ),
@@ -121,10 +125,6 @@ class Abstract(base.ATCTContent):
         """Override description accessor to return author list"""
         return self.formatAuthors()
 
-    def Country(self):
-        """Inferred from profile"""
-        #XXX Todo
-        return 'None'
     
     def formatAuthors(self, separator = "<br />"):
         
@@ -137,6 +137,10 @@ class Abstract(base.ATCTContent):
                                                author.get('affiliation'),
                                                ))
         return separator.join(strings)
+
+    def CountryNames(self, instance):
+        """List of all country names (from ATExtensions)"""
+        return getDisplayList(self, 'country_names')
 
     def getTopics(self):
         """Available scientific categories (set on parent folder)"""
@@ -157,6 +161,7 @@ class Abstract(base.ATCTContent):
                  'lastname': '(your last name)',
                  'email': 'you@somewhere.com',
                  'affiliation': 'Some Great Place',
+                 'country': 'Sweden',
                  },]
 
     def getTextSize(self):

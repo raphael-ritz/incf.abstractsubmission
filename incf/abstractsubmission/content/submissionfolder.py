@@ -79,8 +79,8 @@ class SubmissionFolder(folder.ATBTreeFolder):
                 'Workshop 4',
                 'US Node Session',
                 'Spotlight Presentation',
-                'Poster',
-                'Demo',
+                'Poster Session',
+                'Demo Session',
                 )
 
     def csv(self, delimiter='|', newline='\n\r'):
@@ -103,10 +103,10 @@ class SubmissionFolder(folder.ATBTreeFolder):
                       abstract.getAuthors()[0].get('lastname'),
                       abstract.getAuthors()[0].get('email'),
                       abstract.getAuthors()[0].get('affiliation'),
-                      abstract.Country(),
+                      abstract.getAuthors()[0].get('country'),
                       abstract.Title(),
                       abstract.getPresentationFormat(),
-                      abstract.getSessiontype(),
+                      abstract.getSessionType(),
                       abstract.absolute_url(),
                       ]
             out.write(delimiter.join(values) + newline)
