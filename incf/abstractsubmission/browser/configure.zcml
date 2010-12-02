@@ -7,4 +7,12 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+  
+    <browser:page
+	for="incf.abstractsubmission.interfaces.IAbstract"
+        name="abstract_view"
+	template="abstract_view.pt"
+	permission="zope2.View"
+	/>
+
 </configure>
