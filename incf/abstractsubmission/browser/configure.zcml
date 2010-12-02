@@ -15,4 +15,11 @@
 	permission="zope2.View"
 	/>
 
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="introduction_view"
+	template="folder_view.pt"
+	permission="zope2.View"
+	/>
+
 </configure>
