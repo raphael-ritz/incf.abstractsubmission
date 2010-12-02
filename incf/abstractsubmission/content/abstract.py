@@ -1,6 +1,13 @@
 """Definition of the Abstract content type
 """
 
+try:
+    import json
+except ImportError:  # python <= 2.4
+    import simplejson as json
+
+from urllib import urlopen
+
 from zope.interface import implements
 
 from Products.CMFCore.permissions import ReviewPortalContent
@@ -156,7 +163,13 @@ class Abstract(base.ATCTContent):
 
     def defaultAuthor(self):
         """Return data of current user as default for first author"""
-        #XXX TODO
+
+        memberId = self.portal_membership.getAuthenticatedMember().getId()
+        base_url = "http://incf.org/portal_membership/getMemberInfo"
+        url = base_url + "?format=json&memberId=%s" % memberId 
+        data = urlopen(url).read()
+        if data:
+            return [json.loads(data),]
         return [{'firstnames': '(your first name)',
                  'lastname': '(your last name)',
                  'email': 'you@somewhere.com',
