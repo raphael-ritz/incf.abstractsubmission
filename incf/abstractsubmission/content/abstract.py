@@ -3,6 +3,8 @@
 
 from zope.interface import implements
 
+from Products.CMFCore.permissions import ReviewPortalContent
+
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base
 from Products.ATContentTypes.content import schemata
@@ -61,7 +63,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
                                                     ('Demo', 'Demo'))),
                       default='Poster',
-                      widget=atapi.SelectionWidget(labael="Preferred "\
+                      widget=atapi.SelectionWidget(label="Preferred "\
                                                    "Presentation Format",
                                                    format="radio"),
                       ),
@@ -76,6 +78,12 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('topic',
                       vocabulary='getTopics',
                       required=1,
+                      widget=atapi.SelectionWidget(format="radio"),
+                      ),
+    atapi.StringField('sessionType',
+                      vocabulary='getSessionTypes',
+                      default='Poster',
+                      write_permission=ReviewPortalContent,
                       widget=atapi.SelectionWidget(format="radio"),
                       ),
 ))
@@ -112,6 +120,11 @@ class Abstract(base.ATCTContent):
     def Description(self):
         """Override description accessor to return author list"""
         return self.formatAuthors()
+
+    def Country(self):
+        """Inferred from profile"""
+        #XXX Todo
+        return 'None'
     
     def formatAuthors(self, separator = "<br />"):
         
@@ -126,8 +139,14 @@ class Abstract(base.ATCTContent):
         return separator.join(strings)
 
     def getTopics(self):
-        """Available scientific categories"""
+        """Available scientific categories (set on parent folder)"""
         terms = self.aq_parent.getTopics()
+        vocab = [(term, term) for term in terms]
+        return atapi.DisplayList(vocab)
+
+    def getSessionTypes(self):
+        """Available session types (set on parent folder)"""
+        terms = self.aq_parent.getSessionTypes()
         vocab = [(term, term) for term in terms]
         return atapi.DisplayList(vocab)
 
@@ -142,7 +161,7 @@ class Abstract(base.ATCTContent):
 
     def getTextSize(self):
         """Number of characters of abstract"""
-        return len(self.getAbstract(mimetype="text/plain"))
+        return len(self.getAbstract(mimetype="text/plain").strip())
 
 
 atapi.registerType(Abstract, PROJECTNAME)

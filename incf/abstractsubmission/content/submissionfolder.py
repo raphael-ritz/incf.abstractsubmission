@@ -24,7 +24,12 @@ SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
                      "to be offered for the abstract classification here. "\
                      "One term per line."),
                      ),
-
+    atapi.LinesField('sessionTypes',
+                     default_method="getDefaultSessionTypes",
+                     widget=atapi.LinesWidget(description="Define the "\
+                     "session types to be offered for the presenations here. "\
+                     "One term per line."),
+                     ),
 ))
 
 # Set storage on fields copied from ATFolderSchema, making sure
@@ -65,6 +70,19 @@ class SubmissionFolder(folder.ATBTreeFolder):
                 'Clinical neuroscience',
                 )
 
+    def getDefaultSessionTypes(self):
+        """Hard coded list of default session types"""
+        return ('Keynote',
+                'Workshop 1',
+                'Workshop 2',
+                'Workshop 3',
+                'Workshop 4',
+                'US Node Session',
+                'Spotlight Presentation',
+                'Poster',
+                'Demo',
+                )
+
     def csv(self, delimiter='|', newline='\n\r'):
         """Export abstracts in csv format"""
         abstracts = self.contentValues()
@@ -72,8 +90,11 @@ class SubmissionFolder(folder.ATBTreeFolder):
                   'lastname',
                   'email',
                   'affiliation',
+                  'country',
+                  'title',
                   'format',
-                  #'abstract',
+                  'session',
+                  'url',
                   ]
         out = StringIO()
         out.write(delimiter.join(fields) + newline)
@@ -82,8 +103,11 @@ class SubmissionFolder(folder.ATBTreeFolder):
                       abstract.getAuthors()[0].get('lastname'),
                       abstract.getAuthors()[0].get('email'),
                       abstract.getAuthors()[0].get('affiliation'),
+                      abstract.Country(),
+                      abstract.Title(),
                       abstract.getPresentationFormat(),
-                      #abstract.getAbstract(),
+                      abstract.getSessiontype(),
+                      abstract.absolute_url(),
                       ]
             out.write(delimiter.join(values) + newline)
         value = out.getvalue()
