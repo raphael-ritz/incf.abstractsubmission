@@ -24,6 +24,14 @@
 
     <browser:page
 	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="topics_view"
+	template="topical_listing_view.pt"
+	class="incf.abstractsubmission.browser.folder_view.FolderView"
+	permission="zope2.View"
+	/>
+
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
         name="upload_sample_data"
 	class="incf.abstractsubmission.browser.upload.Upload"
 	attribute="upload"

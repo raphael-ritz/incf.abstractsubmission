@@ -132,7 +132,10 @@ class Abstract(base.ATCTContent):
         """Override description accessor to return author list"""
         return self.formatAuthors()
 
-    
+    def Subject(self):
+        """Override subject to return topic"""
+        return [self.getTopic()]
+
     def formatAuthors(self, separator = ", "):
         
         authors = self.getAuthors()
