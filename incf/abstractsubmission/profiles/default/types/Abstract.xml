@@ -12,7 +12,7 @@
   <property name="immediate_view">atct_edit</property>
   <property name="global_allow">False</property>
   <property name="filter_content_types">False</property>
-  <property name="allow_discussion">False</property>
+  <property name="allow_discussion">True</property>
   <property name="default_view">abstract_view</property>
   <property name="view_methods">
     <element value="abstract_view" />

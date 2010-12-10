@@ -38,7 +38,7 @@ Technically, the INCF Software Center is implemented on top of a modern, flexibl
 The INCF Secretariat hereby also would like to invite developers of software tools within the field of computational neuroscience to use the Software Center. A limited start-up help will be provided. Up-to-date information will be available at the poster.</p>""",
      'abstract_format': 'text/html',
      'presentationFormat': 'Demo',
-     'whyDemo': 'We want to user acceptance teting at the meeting',
+     'whyDemo': 'We want to do user acceptance testing at the meeting',
      'topic': 'Infrastructural and portal services',
      'sessionType': 'Demo Session',
      },

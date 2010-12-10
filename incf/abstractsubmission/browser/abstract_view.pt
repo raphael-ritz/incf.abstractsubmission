@@ -50,17 +50,30 @@
         Body text
         </metal:field>
 
-        <metal:field use-macro="python:here.widget('presentationFormat', mode='view')">
-        Body text
-        </metal:field>
-
-        <metal:field use-macro="python:here.widget('whyDemo', mode='view')">
-        Body text
-        </metal:field>
-
-        <metal:field use-macro="python:here.widget('topic', mode='view')">
-        Body text
-        </metal:field>
+	<div>
+	  <b>Preferred presentation format</b>:
+          <metal:field use-macro="python:here.widget('presentationFormat', mode='view')">
+            Body text
+          </metal:field>
+	</div>
+	<div tal:condition="here/getWhyDemo">
+	  <b>Why demo</b>:
+          <metal:field use-macro="python:here.widget('whyDemo', mode='view')">
+            Body text
+          </metal:field>
+	</div>
+	<div>
+	  <b>Topic</b>:
+          <metal:field use-macro="python:here.widget('topic', mode='view')">
+            Body text
+          </metal:field>
+	</div>
+	<div>
+	  <b>Session</b>:
+          <metal:field use-macro="python:here.widget('sessionType', mode='view')">
+            Body text
+          </metal:field>
+	</div>
 
         <div metal:use-macro="here/document_relateditems/macros/relatedItems">
             show related items if they exist
