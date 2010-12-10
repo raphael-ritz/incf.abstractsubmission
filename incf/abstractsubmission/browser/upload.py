@@ -19,6 +19,6 @@ class Upload(BrowserView):
             target.invokeFactory(type_name="Abstract",
                                  id=id,
                                  )
-            target[id].edit(abstract)
+            target[id].edit(**abstract)
             target[id].reindexObject()
 

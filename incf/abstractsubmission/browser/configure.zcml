@@ -22,7 +22,7 @@
 	permission="zope2.View"
 	/>
 
-    <browser:view
+    <browser:page
 	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
         name="upload_sample_data"
 	class="incf.abstractsubmission.browser.upload.Upload"
