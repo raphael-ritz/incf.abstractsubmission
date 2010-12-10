@@ -17,7 +17,7 @@ ABSTRACTS = [
                   },
                  {'firstnames': 'Raphael',
                   'lastname': 'Ritz',
-                  'email': 'raphae.ritz@incf.org',
+                  'email': 'raphael.ritz@incf.org',
                   'affiliation': 'INCF',
                   'country': 'Sweden',
                   },

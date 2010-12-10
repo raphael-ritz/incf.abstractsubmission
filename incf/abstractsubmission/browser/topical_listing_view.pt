@@ -19,16 +19,16 @@
         <h1 class="documentFirstHeading"> 
             <metal:field use-macro="python:here.widget('title', mode='view')">
             Title
-            </metal:field>
+            </metal:field> grouped by Topic
         </h1>
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <p class="documentDescription">
+        <!--p class="documentDescription">
             <metal:field use-macro="python:here.widget('description', mode='view')">
             Description
             </metal:field>
-        </p>
+        </p-->
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
