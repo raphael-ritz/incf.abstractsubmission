@@ -46,7 +46,7 @@ schemata.finalizeATCTSchema(
 
 
 class SubmissionFolder(folder.ATBTreeFolder):
-    """Container for Abstract submissions"""
+    """Section for Abstract submissions"""
     implements(ISubmissionFolder)
 
     meta_type = "SubmissionFolder"
@@ -117,6 +117,10 @@ class SubmissionFolder(folder.ATBTreeFolder):
                                         "inline;filename=congress2010abstracts.csv")
 
         return value
+
+    def displayContentsTab(self):
+        """Suppress the default Contents tab"""
+        return False
                       
 
 atapi.registerType(SubmissionFolder, PROJECTNAME)
