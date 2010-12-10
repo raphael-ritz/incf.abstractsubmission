@@ -133,15 +133,15 @@ class Abstract(base.ATCTContent):
         return self.formatAuthors()
 
     
-    def formatAuthors(self, separator = "<br />"):
+    def formatAuthors(self, separator = ", "):
         
         authors = self.getAuthors()
         strings = []
         for author in authors:
-            strings.append("%s %s (%s, %s)" % (author.get('firstnames'),
+            strings.append("%s %s (%s)" % (author.get('firstnames'),
                                                author.get('lastname'),
-                                               author.get('email'),
                                                author.get('affiliation'),
+                                               # author.get('country'),
                                                ))
         return separator.join(strings)
 
