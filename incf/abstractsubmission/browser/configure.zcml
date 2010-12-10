@@ -22,4 +22,12 @@
 	permission="zope2.View"
 	/>
 
+    <browser:view
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="upload_sample_data"
+	class="incf.abstractsubmission.browser.upload.Upload"
+	attribute="upload"
+	permission="cmf.ManagePortal"
+	/>
+
 </configure>
