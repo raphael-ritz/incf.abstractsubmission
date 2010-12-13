@@ -13,7 +13,7 @@
                        getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                        templateId template/getId;
 		       url context/absolute_url;
-                       topic request/topic|nothing;">
+                       topic request/topic|request/Subject|nothing;">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
