@@ -178,7 +178,7 @@ class Abstract(base.ATCTContent):
         data = urlopen(url).read()
         if data:
             return [json.loads(data),]
-        return [{'firstnames': '(your first name)',
+        return [{'firstnames': '(your first names)',
                  'lastname': '(your last name)',
                  'email': 'you@somewhere.com',
                  'affiliation': 'Some Great Place',
