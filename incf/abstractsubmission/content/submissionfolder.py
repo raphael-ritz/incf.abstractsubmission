@@ -12,10 +12,37 @@ from Products.ATContentTypes.content import schemata
 # -*- Message Factory Imported Here -*-
 
 from incf.abstractsubmission.interfaces import ISubmissionFolder
+
 from incf.abstractsubmission.config import PROJECTNAME
+from incf.abstractsubmission.config import INTRO_CLOSED
+from incf.abstractsubmission.config import INTRO_OPEN_ANONYMOUS
+from incf.abstractsubmission.config import INTRO_OPEN_AUTHENTICATED
+
 
 SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
-    atapi.TextField('introduction',
+    atapi.BooleanField('open'),
+    atapi.TextField('introductionClosed',
+                    default=INTRO_CLOSED,
+                    default_output_type='text/html',
+                    allowable_content_types=('text/plain',
+                                             'text/structured',
+                                             'text/html'),
+                    widget=atapi.RichWidget(),
+                    ),
+    atapi.TextField('introductionOpenAnonymous',
+                    default=INTRO_OPEN_ANONYMOUS,
+                    default_output_type='text/html',
+                    allowable_content_types=('text/plain',
+                                             'text/structured',
+                                             'text/html'),
+                    widget=atapi.RichWidget(),
+                    ),
+    atapi.TextField('introductionOpenAuthenticated',
+                    default=INTRO_OPEN_AUTHENTICATED,
+                    default_output_type='text/html',
+                    allowable_content_types=('text/plain',
+                                             'text/structured',
+                                             'text/html'),
                     widget=atapi.RichWidget(),
                     ),
     atapi.LinesField('topics',
@@ -37,6 +64,21 @@ SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
 
 SubmissionFolderSchema['title'].storage = atapi.AnnotationStorage()
 SubmissionFolderSchema['description'].storage = atapi.AnnotationStorage()
+SubmissionFolderSchema['open'].widget.description="Tick to open abstract "\
+    "submission and untick to close it."
+SubmissionFolderSchema['introductionClosed'].widget.label = "Introduction (i)"
+SubmissionFolderSchema['introductionClosed'].widget.description = \
+    "This text is shown if abstract submission is closed."
+SubmissionFolderSchema['introductionOpenAnonymous'].widget.label = "Introduction (ii)"
+SubmissionFolderSchema['introductionOpenAnonymous'].widget.description = \
+    "This text is shown if abstract submission is open and the user is "\
+    "anonymous. Following the text a register and login button are offered."
+SubmissionFolderSchema['introductionOpenAuthenticated'].widget.label = "Introduction (iii)"
+SubmissionFolderSchema['introductionOpenAuthenticated'].widget.description = \
+    "This text is shown if abstract submission is open and the user is "\
+    "authenticated. Following the text a 'create new' and 'view exisiting' "\
+    "button are offered."
+
 
 schemata.finalizeATCTSchema(
     SubmissionFolderSchema,

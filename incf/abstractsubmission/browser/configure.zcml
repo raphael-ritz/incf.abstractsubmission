@@ -18,6 +18,7 @@
     <browser:page
 	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
         name="introduction_view"
+	class="incf.abstractsubmission.browser.folder_view.FolderView"
 	template="folder_view.pt"
 	permission="zope2.View"
 	/>

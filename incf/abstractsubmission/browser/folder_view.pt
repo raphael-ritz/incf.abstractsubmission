@@ -11,8 +11,7 @@
     <tal:main-macro metal:define-macro="main"
            tal:define="kssClassesView context/@@kss_field_decorator_view;
                        getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
-                       templateId template/getId;
-                       text here/getIntroduction;">
+                       templateId template/getId;">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -32,15 +31,63 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <p tal:condition="python: not text and is_editable"
-           i18n:translate="no_body_text"
-           class="discreet">
-            This item does not have any body text, click the edit tab to change it.
-        </p>
+	<div tal:condition="not:here/getOpen">
+          <metal:field use-macro="python:here.widget('introductionClosed', mode='view')">
+            Body text
+          </metal:field>
+	</div>
 
-        <metal:field use-macro="python:here.widget('introduction', mode='view')">
-        Body text
-        </metal:field>
+
+	<div tal:condition="python:here.getOpen() and view.isAnonymous">
+          <metal:field use-macro="python:here.widget('introductionOpenAnonymous', mode='view')">
+            Body text
+          </metal:field>
+	  <div class="formControls">
+	    <form id="login"
+		  action="login_form"
+		  method="post">
+	      <input class="context"
+		     type="submit"
+		     value="login"
+		     name="login">
+	    </form>
+	    <div>
+	      In case you have no account yet please sign up first at the 
+	      INCF portal.
+	    </div>
+	    <form id="register"
+		  action="http://www.incf.org/join_form"
+		  method="post">
+	      <input class="context"
+		     type="submit"
+		     value="sign up"
+		     name="register">
+	    </form>
+	  </div>
+	</div>
+
+
+
+	<div tal:condition="python:here.getOpen() and not view.isAnonymous">
+          <metal:field use-macro="python:here.widget('introductionOpenAuthenticated', mode='view')">
+            Body text
+          </metal:field>
+	  <!-- add add and view abstract buttons -->
+	  <div class="formControls">
+	    <form id="create"
+		  action="createObject"
+		  method="post">
+	      <input class="context"
+		     type="submit"
+		     value="New Abstract"
+		     name="create">
+	      <input class="hidden"
+		     type="hidden"
+		     name="type_name"
+		     value="Abstract">
+	    </form>
+	  </div>
+	</div>
 
 
         <div metal:use-macro="here/document_relateditems/macros/relatedItems">

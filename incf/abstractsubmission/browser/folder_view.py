@@ -14,3 +14,9 @@ class FolderView(BrowserView):
                             Subject=topic,
                             sort_on="created",
                             )   # XXX maybe add a path constraint?
+
+    @property
+    def isAnonymous(self):
+        """True is user is anonymous False otherwise"""
+        membertool = getToolByName(self.context, 'portal_membership')
+        return membertool.isAnonymousUser()
