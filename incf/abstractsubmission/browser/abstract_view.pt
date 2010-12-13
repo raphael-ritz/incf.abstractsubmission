@@ -73,6 +73,11 @@
           <metal:field use-macro="python:here.widget('sessionType', mode='view')">
             Body text
           </metal:field>
+	  <span tal:condition="here/getIdentifier">
+		(<metal:field use-macro="python:here.widget('identifier', mode='view')">
+		  Body text
+		</metal:field>)
+	  </span>
 	</div>
 
         <div metal:use-macro="here/document_relateditems/macros/relatedItems">

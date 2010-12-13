@@ -97,6 +97,9 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       write_permission=ReviewPortalContent,
                       widget=atapi.SelectionWidget(format="radio"),
                       ),
+    atapi.StringField('identifier',
+                      write_permission=ReviewPortalContent,
+                      ),
 ))
 
 # Set storage on fields copied from ATContentTypeSchema, making sure
@@ -107,6 +110,8 @@ AbstractSchema['description'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].schemata = 'categorization'
 AbstractSchema['image'].widget.description = "An optional image to be "\
     "displayed following the text (recommended size: ??x??)"
+AbstractSchema['identifier'].widget.description = "Identifier to be "\
+    "used in the program and abstract booklet."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 

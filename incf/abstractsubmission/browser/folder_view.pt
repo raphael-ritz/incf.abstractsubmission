@@ -72,7 +72,6 @@
           <metal:field use-macro="python:here.widget('introductionOpenAuthenticated', mode='view')">
             Body text
           </metal:field>
-	  <!-- add add and view abstract buttons -->
 	  <div class="formControls">
 	    <form id="create"
 		  action="createObject"
