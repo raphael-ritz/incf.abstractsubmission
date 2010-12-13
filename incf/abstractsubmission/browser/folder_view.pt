@@ -43,26 +43,26 @@
             Body text
           </metal:field>
 	  <div class="formControls">
-	    <form id="login"
-		  action="login_form"
-		  method="post">
-	      <input class="context"
-		     type="submit"
-		     value="login"
-		     name="login">
-	    </form>
-	    <div>
-	      In case you have no account yet please sign up first at the 
-	      INCF portal.
-	    </div>
-	    <form id="register"
-		  action="http://www.incf.org/join_form"
-		  method="post">
-	      <input class="context"
-		     type="submit"
-		     value="sign up"
-		     name="register">
-	    </form>
+	    <table><tr><td>
+		  <form id="login"
+			action="login_form"
+			method="post">
+		    <input class="context"
+			   type="submit"
+			   value="login"
+			   name="login">
+		  </form>
+		</td>
+		<td>
+		  <form id="register"
+			action="http://www.incf.org/join_form"
+			method="post">
+		    <input class="context"
+			   type="submit"
+			   value="sign up"
+			   name="register">
+		  </form>
+	    </td></tr></table>
 	  </div>
 	</div>
 
