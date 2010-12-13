@@ -43,7 +43,7 @@
 	  </div>
 	  <div tal:condition="python:t!=topic and topic!='all'">
 	     <h3><a href="#"
-		    tal:attributes="href python:'%s/topics_view?topic=%s'%(url,t)"
+		    tal:attributes="href python:'%s/topics_view?-C=&Subject=%s'%(url,t)"
 		    tal:content="python:view.headline(t)">Topic</a></h3>
 	  </div>
 	</div>
