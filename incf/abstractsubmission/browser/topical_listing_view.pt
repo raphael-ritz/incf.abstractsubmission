@@ -12,7 +12,8 @@
            tal:define="kssClassesView context/@@kss_field_decorator_view;
                        getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                        templateId template/getId;
-                       text here/getIntroduction;">
+		       url context/absolute_url;
+                       topic request/topic|nothing;">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -24,26 +25,39 @@
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <!--p class="documentDescription">
-            <metal:field use-macro="python:here.widget('description', mode='view')">
-            Description
-            </metal:field>
-        </p-->
-
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-	<div tal:repeat="topic here/getTopics">
+	<div tal:repeat="t here/getTopics">
 
-	  <h3 tal:content="topic">Topic</h3>
-	  <ul>
-	    <li tal:repeat="abstract python:view.getAbstractsByTopic(topic)">
-	      <a href="" 
-		 tal:attributes="href abstract/getURL"
-		 tal:content="abstract/Title">title</a>
-	      <br />
-	      <span class="discreet" tal:content="abstract/Description">authors</span>
-	    </li>
-	  </ul>
+	  <div tal:condition="python:t==topic or topic=='all'">
+	    <h3 tal:content="python:view.headline(t)">Topic</h3>
+	    <ul>
+	      <li tal:repeat="abstract python:view.getAbstractsByTopic(t)">
+		<a href="" 
+		   tal:attributes="href abstract/getURL"
+		   tal:content="abstract/Title">title</a>
+		<br />
+		<span class="discreet" tal:content="abstract/Description">authors</span>
+	      </li>
+	    </ul>
+	  </div>
+	  <div tal:condition="python:t!=topic and topic!='all'">
+	     <h3><a href="#"
+		    tal:attributes="href python:'%s/topics_view?topic=%s'%(url,t)"
+		    tal:content="python:view.headline(t)">Topic</a></h3>
+	  </div>
+	</div>
+
+	<div tal:condition="python:topic!='all'">
+	  <h3><a href="#"
+		 tal:attributes="href python:'%s/topics_view?topic=all'%url">
+	      [Expand all]</a>
+	</div>
+
+	<div tal:condition="python:topic=='all'">
+	  <h3><a href="#"
+		 tal:attributes="href python:'%s/topics_view'%url">
+	      [Collapse all]</a>
 	</div>
 
         <div metal:use-macro="here/document_relateditems/macros/relatedItems">
