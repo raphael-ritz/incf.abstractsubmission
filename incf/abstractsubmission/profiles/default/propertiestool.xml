@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<object name="portal_properties">
+    <object name="extensions_properties">
+        <property name="neuroinf_topics" type="lines">
+            <element value="General neuroinformatics"/>
+            <element value="Computational neuroscience"/>
+            <element value="Digital atlasing"/>
+            <element value="Neuroimaging"/>
+            <element value="Genomics and genetics"/>
+            <element value="Large scale modeling"/>
+            <element value="Neuromorphic engineering"/>
+            <element value="Brain machine interface"/>
+            <element value="Electrophysiology"/>
+            <element value="Infrastructural and portal services"/>
+            <element value="Clinical neuroscience"/>
+        </property>
+    </object>
+</object>
