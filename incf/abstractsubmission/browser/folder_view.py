@@ -10,7 +10,7 @@ class FolderView(BrowserView):
     
     @property
     def isAnonymous(self):
-        """True is user is anonymous False otherwise"""
+        """True if user is anonymous False otherwise"""
         membertool = getToolByName(self.context, 'portal_membership')
         return membertool.isAnonymousUser()
 
@@ -20,6 +20,14 @@ class FolderView(BrowserView):
                             Subject=topic,
                             sort_on="created",
                             )   # XXX maybe add a path constraint?
+
+    def getAbstractsForCurrentMember(self):
+        """Look up abstract submissions for the current user """
+        membertool = getToolByName(self.context, 'portal_membership')
+        userid = membertool._getSafeMemberId()
+        return self.catalog(portal_type='Abstract',
+                            Creator=userid,
+                            )
 
 # XXX should we @memoize this?
     def getTopicCount(self, topic):

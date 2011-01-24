@@ -88,6 +88,18 @@
 	  </div>
 	</div>
 
+	<div tal:condition="python:not view.isAnonymous"
+	     tal:define="abstracts view/getAbstractsForCurrentMember|nothing">
+	  <h3>My Abstracts</h3>
+	  <ul tal:condition="abstracts">
+	    <li tal:repeat="abstract abstracts">
+	      <a href="#"
+	         tal:attributes="href abstract/getURL"
+	         tal:content="abstract/Title">title linked to item</a>
+	    </li>
+	  </ul>
+	  <p tal:condition="python:not abstracts">Nothing submitted so far.</p>
+	</div>
 
         <div metal:use-macro="here/document_relateditems/macros/relatedItems">
             show related items if they exist
