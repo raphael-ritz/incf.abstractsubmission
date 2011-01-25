@@ -73,9 +73,10 @@
             Body text
           </metal:field>
 	  <div class="formControls">
-	    <form id="create"
-		  action="createObject"
-		  method="post">
+	    <table><tr><td>	    
+	      <form id="create"
+	            action="createObject"
+	            method="post">
 	      <input class="context"
 		     type="submit"
 		     value="New Abstract"
@@ -84,7 +85,19 @@
 		     type="hidden"
 		     name="type_name"
 		     value="Abstract">
-	    </form>
+	      </form>
+	      </td>
+	      <td>
+		<form id="view_profile"
+		      action="http://www.incf.org/community/people/"
+	              method="post"
+		      tal:attributes="action view/profileUrl">
+		    <input class="context"
+			   type="submit"
+			   value="View INCF profile"
+			   name="view_profile">
+		  </form>
+	    </td></tr></table>
 	  </div>
 	</div>
 

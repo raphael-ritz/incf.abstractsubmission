@@ -29,6 +29,12 @@ class FolderView(BrowserView):
                             Creator=userid,
                             )
 
+    def profileUrl(self):
+        """URL to profile page at main site for current user"""
+        membertool = getToolByName(self.context, 'portal_membership')
+        userid = membertool._getSafeMemberId()
+        return "http://www.incf.org/community/people/%s" % userid
+
 # XXX should we @memoize this?
     def getTopicCount(self, topic):
         """number of abstracts for the topic given"""
