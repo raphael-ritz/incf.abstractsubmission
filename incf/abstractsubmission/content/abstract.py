@@ -154,6 +154,11 @@ class Abstract(base.ATCTContent):
         """List of all country names (from ATExtensions)"""
         return getDisplayList(self, 'country_names')
 
+    def Country(self):
+        """Country of first author's affiliation
+        Set by 'defaultAuthor' on creation"""
+        return getattr(self, 'country' , 'unknown')
+
     def getTopics(self):
         """Available scientific categories (set on parent folder)"""
         terms = self.aq_parent.getTopics()
@@ -169,17 +174,23 @@ class Abstract(base.ATCTContent):
     def defaultAuthor(self):
         """Return data of current user as default for first author"""
 
-        memberId = self.portal_membership.getAuthenticatedMember().getId()
+        member = self.portal_membership.getAuthenticatedMember()
+        memberId = member.getId()
+        memberEmail = member.getProperty('email')
+        
         base_url = "http://incf.org/portal_membership/getMemberInfo"
         url = base_url + "?format=json&memberId=%s" % memberId 
-        data = urlopen(url).read()
-        if data:
-            return [json.loads(data),]
+        jsondata = urlopen(url).read()
+        if jsondata:
+            data = json.loads(jsondata)
+            self.country = data.get('country','unknown')
+            data['email'] = memberEmail
+            return [data]
+
         return [{'firstnames': '(your first names)',
                  'lastname': '(your last name)',
                  'email': 'you@somewhere.com',
                  'affiliation': 'Some Great Place',
-                 'country': 'Sweden',
                  },]
 
     def getTextSize(self):

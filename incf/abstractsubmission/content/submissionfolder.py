@@ -4,6 +4,7 @@
 from StringIO import StringIO
 
 from zope.interface import implements
+from contentratings.interfaces import IUserRating
 
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import folder
@@ -137,19 +138,25 @@ class SubmissionFolder(folder.ATBTreeFolder):
                   'format',
                   'session',
                   'url',
+                  'rating',
                   ]
         out = StringIO()
         out.write(delimiter.join(fields) + newline)
         for abstract in abstracts:
+            rated = IUserRating(abstract)
+            average = float(rated.averageRating)
+            number = rated.numberOfRatings
+            rating = "%.2s (%s)" % (average, number)
             values = [abstract.getAuthors()[0].get('firstnames'),
                       abstract.getAuthors()[0].get('lastname'),
                       abstract.getAuthors()[0].get('email'),
                       abstract.getAuthors()[0].get('affiliation'),
-                      abstract.getAuthors()[0].get('country'),
+                      abstract.Country(),
                       abstract.Title(),
                       abstract.getPresentationFormat(),
-                      abstract.getSessionType(),
+                      ', '.join(abstract.getSessionType()),
                       abstract.absolute_url(),
+                      rating,
                       ]
             out.write(delimiter.join(values) + newline)
         value = out.getvalue()
