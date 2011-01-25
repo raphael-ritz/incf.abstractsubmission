@@ -19,6 +19,12 @@ class Upload(BrowserView):
             id = abstract.get('id', '')
             if not id or id in ids:
                 continue
+            
+            # deal with schema change: sessionType is now multi valued
+            stype = abstract.get('sessionType', '')
+            if type(stype) == type(''):
+                abstract['sessionType'] = [stype]
+                
             target.invokeFactory(type_name="Abstract",
                                  id=id,
                                  )
@@ -49,6 +55,12 @@ class Upload(BrowserView):
                     print "Found %s - doing nothing" % id
                     continue
                 print "Creating %s" % id
+
+                # deal with schema change: sessionType is now multi valued
+                stype = abstract.get('sessionType', '')
+                if type(stype) == type(''):
+                    abstract['sessionType'] = [stype]
+
                 target.invokeFactory(type_name="Abstract",
                                      id=id,
                                      )
