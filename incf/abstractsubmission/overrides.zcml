@@ -2,6 +2,15 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
+    <!-- User our customized ploneview class -->
+    <browser:page
+    	for="*"
+	name="plone"
+	class=".browser.ploneview.IncfPlone"
+	permission="zope.Public"
+	allowed_interface="Products.CMFPlone.browser.interfaces.IPlone"
+	/>
+
     <!-- Render comments -->
     <browser:viewlet
         name="plone.comments"
