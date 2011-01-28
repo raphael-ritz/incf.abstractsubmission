@@ -139,14 +139,30 @@ class SubmissionFolder(folder.ATBTreeFolder):
                   'session',
                   'url',
                   'rating',
+                  '#replies',
+                  'comments',
                   ]
         out = StringIO()
         out.write(delimiter.join(fields) + newline)
         for abstract in abstracts:
+            # handle ratings
             rated = IUserRating(abstract)
             average = float(rated.averageRating)
             number = rated.numberOfRatings
-            rating = "%.2s (%s)" % (average, number)
+            rating = "%2.2f (%s)" % (average, number)
+            # handle comments
+            reply_count = abstract.portal_discussion.getDiscussionFor(abstract).replyCount(abstract)
+            replies = abstract.portal_discussion.getDiscussionFor(abstract).getReplies()
+            if not replies:
+                comments = 'None'
+            else:
+                comments = []
+                for r in replies:
+                    comments.append("%s (%s): %s - %s" % (r.Creator(),
+                                                          r.created().Date(),
+                                                          r.Title(),
+                                                          r.CookedBody()))
+                comments = " -- ".join(comments)
             values = [abstract.getAuthors()[0].get('firstnames'),
                       abstract.getAuthors()[0].get('lastname'),
                       abstract.getAuthors()[0].get('email'),
@@ -157,6 +173,8 @@ class SubmissionFolder(folder.ATBTreeFolder):
                       ', '.join(abstract.getSessionType()),
                       abstract.absolute_url(),
                       rating,
+                      str(reply_count),
+                      comments,
                       ]
             out.write(delimiter.join(values) + newline)
         value = out.getvalue()
