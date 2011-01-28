@@ -54,9 +54,15 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                              'text/structured',
                                              'text/html'),
                     widget=atapi.RichWidget(
-                #label='Research Focus',
-                rows=20,
-                #description="The research focus of this group.",
+                        rows=20,
+                        description="Please limit your abstract to fit on one page.",
+                        filter_buttons=(
+                            'bg-indent',
+                            'imagelibdrawer-button',
+                            'linklibdrawer-button',
+                            'anchors-button',
+                            'manage-anchors-tab',
+                            ),
     ),
                     ),
     atapi.ImageField('image'),
