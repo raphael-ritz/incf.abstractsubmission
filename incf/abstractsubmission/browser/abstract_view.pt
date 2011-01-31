@@ -44,7 +44,7 @@
 
 	<div tal:condition="context/getImage">
 	  <img src="" alt=""
-	      tal:replace="structure python:context.tag(scale='large')" />
+	      tal:replace="structure python:context.tag(scale='default')" />
 	</div>
 	  
         <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
