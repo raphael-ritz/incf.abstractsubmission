@@ -69,6 +69,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     ),
     atapi.ImageField('image',
                      sizes={'thumb':(80,80),
+                            'small':(200,200),
                             'default':(400,400),
                             'large':(750,750),
                             },
