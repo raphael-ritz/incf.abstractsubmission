@@ -65,7 +65,12 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                             ),
     ),
                     ),
-    atapi.ImageField('image'),
+    atapi.ImageField('image',
+                     sizes={'thumb':(80,80),
+                            'default':(400,400),
+                            'large':(750,750),
+                            },
+                     ),
     atapi.StringField('imageCaption',
                       widget=atapi.TextAreaWidget(label="Image Caption",
                                                   rows=3),
@@ -113,7 +118,7 @@ AbstractSchema['title'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].schemata = 'categorization'
 AbstractSchema['image'].widget.description = "An optional image to be "\
-    "displayed following the text (recommended size: ??x??)"
+    "displayed following the text. Formats supported are JPG, GIF, and PNG (recommended size: ??x??)"
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
 
@@ -202,6 +207,11 @@ class Abstract(base.ATCTContent):
     def getTextSize(self):
         """Number of characters of abstract"""
         return len(self.getAbstract(mimetype="text/plain").strip())
+
+    def tag(self, **kwargs):
+        """Generate image tag using the api of the ImageField
+        """
+        return self.getField('image').tag(self, **kwargs)
 
 
 atapi.registerType(Abstract, PROJECTNAME)

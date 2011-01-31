@@ -42,10 +42,11 @@
         Body text
         </metal:field>
 
-        <metal:field use-macro="python:here.widget('image', mode='view')">
-        Body text
-        </metal:field>
-
+	<div tal:condition="context/getImage">
+	  <img src="" alt=""
+	      tal:replace="structure python:context.tag(scale='large')" />
+	</div>
+	  
         <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
         Body text
         </metal:field>
