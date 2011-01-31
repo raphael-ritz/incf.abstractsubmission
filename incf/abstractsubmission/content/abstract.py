@@ -27,7 +27,16 @@ from incf.abstractsubmission.interfaces import IAbstract
 from incf.abstractsubmission.config import PROJECTNAME
 
 AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
-
+    ateapi.CommentField('intro',
+                        comment="You are welcome to submit more than one abstract. "\
+                        "The text (plus the optional image) of each "\
+                        "abstract should fit in one A4 page. Saved abstracts "\
+                        "can be modified until the deadline - planned for April "\
+                        "19, 2011. At this time all saved abstracts are considered "\
+                        "submitted in the form they are at that time. Submitters "\
+                        "will be notified of the review result in mid May, i.e, "\
+                        "well in time before the deadline for the early "\
+                        "registration fee (June 1, 2011)."),
     ateapi.RecordsField('authors',
                         subfields=('firstnames', 
                                    'lastname', 
@@ -52,12 +61,12 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     primary=1,
                     required=1,
                     default_output_type='text/x-html-safe',
-                    allowable_content_types=('text/plain',
-                                             'text/structured',
-                                             'text/html'),
+                    allowable_content_types=('text/html'),
                     widget=atapi.RichWidget(
                         rows=20,
-                        description="Please limit your abstract to fit on one page.",
+                        description="Please make sure that we can fit your text "\
+                        "and image (if any) in one A4 page. The image will be "\
+                        "displayed beneath the text followed by the image caption.",
                         filter_buttons=(
                             'bg-indent',
                             'imagelibdrawer-button',
@@ -78,6 +87,19 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       widget=atapi.TextAreaWidget(label="Image Caption",
                                                   rows=3),
                       ),
+    atapi.StringField('imageSize',
+                      vocabulary=atapi.DisplayList((('small', 'Small (200px)'),
+                                                    ('default', 'Default (400px)'),
+                                                    ('large', 'Large (750px)')
+                                                    )),
+                      default='default',
+                      widget=atapi.SelectionWidget(label="Image Size",
+                                                   format='radio',
+                                                   description='The image will be scaled such '\
+                                                   'that max(height,width) matches the selection. '\
+                                                   'The aspect ratio will be preserved.',
+                                                   ),
+                      ),
 #    atapi.ComputedField('size',
 #                        expression="object/getTextSize",
 #                        ),
@@ -87,6 +109,10 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       default='Poster',
                       widget=MasterSelectWidget(label="Preferred "\
                                                 "Presentation Format",
+                                                description='If you want to apply '\
+                                                'for a demo slot please '\
+                                                'select this here. Otherwise leave '\
+                                                'it at the default ("Poster").',
                                                 #format="radio",
                                                 slave_fields=({'name':'whyDemo',
                                                                'action': 'show',
@@ -97,8 +123,8 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       ),
     atapi.TextField('whyDemo',
                     widget=atapi.TextAreaWidget(label="Why Demo?",
-                                                description="If you have "\
-                    "choosen 'Demo' above: Please give a brief explanation "\
+                                                description="Please give a "\
+                                                "brief explanation of "\
                     "why your contribution would benefit from being demonstrated "\
                     "live rather than by a regular poster presentation.",
                                                 ),
@@ -118,6 +144,11 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('identifier',
                       write_permission=ReviewPortalContent,
                       ),
+    ateapi.CommentField('closing',
+                        comment="Make sure to save your abstract submission before you leave. "\
+                        "Saved abstracts can be modified until the deadline of April 19, 2011. "\
+                        "To find your abstract again later on log in to this site and browse "\
+                        "to the 'Abstracts' section or click on your name on the top-right."),
 ))
 
 # Set storage on fields copied from ATContentTypeSchema, making sure
@@ -126,13 +157,23 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 AbstractSchema['title'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].schemata = 'categorization'
-AbstractSchema['image'].widget.description = "An optional image to be "\
-    "displayed following the text. Formats supported are JPG, GIF, and PNG (recommended size: ??x??)"
+AbstractSchema['authors'].widget.description = "Information for the first author is "\
+                                               "pre-populated with your INCF profile "\
+                                               "data. If you change it here it will NOT "\
+                                               "be written back there. Please add futher "\
+                                               "authors in the order in which you want "\
+                                               "to see them displayed."
+AbstractSchema['image'].widget.description = "You have the option to include "\
+                                             "one image with your abstract. This image "\
+                                             "should be in one of the formats GIF, JPG, "\
+                                             "or PNG and cannot be bigger than 5MB. In the "\
+                                             "final display the image will be scaled "\
+                                             "to the size chosen below."
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
-
+AbstractSchema.moveField('title', after="intro")
 
 # hide away some fields for the time being
 for field in AbstractSchema.fields():
