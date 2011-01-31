@@ -50,6 +50,7 @@
         Body text
         </metal:field>
 
+	<div class="abstractHandling">
 	<div>
 	  <b>Preferred presentation format</b>:
           <metal:field use-macro="python:here.widget('presentationFormat', mode='view')">
@@ -85,7 +86,7 @@
         </div>
     
         <div tal:replace="structure provider:plone.belowcontentbody" />
-
+	</div>
     </tal:main-macro>
 </metal:main>
 
