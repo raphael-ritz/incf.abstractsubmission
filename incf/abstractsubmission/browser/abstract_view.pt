@@ -42,9 +42,10 @@
         Body text
         </metal:field>
 
-	<div tal:condition="context/getImage">
+	<div tal:condition="context/getImage"
+	     tal:define="scale context/getImageSize">
 	  <img src="" alt=""
-	      tal:replace="structure python:context.tag(scale='default')" />
+	      tal:replace="structure python:context.tag(scale=scale)" />
 	</div>
 	  
         <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
