@@ -16,6 +16,8 @@ from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base
 from Products.ATContentTypes.content import schemata
 
+from Products.MasterSelectWidget.MasterSelectWidget import MasterSelectWidget
+
 from Products.ATExtensions import ateapi
 from Products.ATExtensions.Extensions.utils import getDisplayList
 
@@ -82,9 +84,15 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
                                                     ('Demo', 'Demo'))),
                       default='Poster',
-                      widget=atapi.SelectionWidget(label="Preferred "\
-                                                   "Presentation Format",
-                                                   format="radio"),
+                      widget=MasterSelectWidget(label="Preferred "\
+                                                "Presentation Format",
+                                                #format="radio",
+                                                slave_fields=({'name':'whyDemo',
+                                                               'action': 'show',
+                                                               'hide_values': ('Demo',),
+                                                               },
+                                                              ),
+                                                ),
                       ),
     atapi.TextField('whyDemo',
                     widget=atapi.TextAreaWidget(label="Why Demo?",
