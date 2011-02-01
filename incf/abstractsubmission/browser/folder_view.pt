@@ -11,7 +11,8 @@
     <tal:main-macro metal:define-macro="main"
            tal:define="kssClassesView context/@@kss_field_decorator_view;
                        getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
-                       templateId template/getId;">
+                       templateId template/getId;
+                       abstracts view/getAbstractsForCurrentMember|nothing;">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -43,7 +44,6 @@
             Body text
           </metal:field>
 	  <div class="formControls">
-	    <table><tr><td>
 		  <form id="login"
 			action="login_form"
 			method="post">
@@ -52,8 +52,9 @@
 			   value="login"
 			   name="login">
 		  </form>
-		</td>
-		<td>
+	    <p>
+	    If you do not have an INCF account please sign up first.
+	    </p>
 		  <form id="register"
 			action="http://www.incf.org/join_form"
 			method="post">
@@ -62,7 +63,6 @@
 			   value="sign up"
 			   name="register">
 		  </form>
-	    </td></tr></table>
 	  </div>
 	</div>
 
@@ -73,7 +73,6 @@
             Body text
           </metal:field>
 	  <div class="formControls">
-	    <table><tr><td>	    
 	      <form id="create"
 	            action="createObject"
 	            method="post">
@@ -86,23 +85,22 @@
 		     name="type_name"
 		     value="Abstract">
 	      </form>
-	      </td>
-	      <td>
-		<form id="view_profile"
-		      action="http://www.incf.org/community/people/"
-	              method="post"
-		      tal:attributes="action view/profileUrl">
-		    <input class="context"
-			   type="submit"
-			   value="View INCF profile"
-			   name="view_profile">
-		  </form>
-	    </td></tr></table>
+	    <p>
+	    Please make sure that your profile data are up-to-date.
+	    </p>
+	    <form id="view_profile"
+	        action="http://www.incf.org/community/people/"
+	        method="post"
+	        tal:attributes="action view/profileUrl">
+	      <input class="context"
+	          type="submit"
+	          value="View INCF profile"
+	          name="view_profile">
+	    </form>
 	  </div>
 	</div>
 
-	<div tal:condition="python:not view.isAnonymous"
-	     tal:define="abstracts view/getAbstractsForCurrentMember|nothing">
+	<div tal:condition="python:abstracts">
 	  <h3>My Abstracts</h3>
 	  <ul tal:condition="abstracts">
 	    <li tal:repeat="abstract abstracts">
