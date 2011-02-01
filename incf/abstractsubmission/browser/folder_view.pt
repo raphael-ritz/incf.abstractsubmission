@@ -53,6 +53,11 @@
 			   name="login">
 		  </form>
 	    <p>
+	    <a href="http://www.incf.org/mail_password_form"
+	       alt="Mail password form" class="link-plain">
+	    Forgot password?</a>
+	    </p>
+	    <p>
 	    If you do not have an INCF account please sign up first.
 	    </p>
 		  <form id="register"
