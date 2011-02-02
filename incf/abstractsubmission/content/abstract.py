@@ -30,7 +30,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         "The text (plus optional image) of each "\
                         "abstract should fit on one page (A4 or US letter format). "\
                         "Saved abstracts "\
-                        "can be modified until the deadline - April 19, 2011"\
+                        "can be modified until the deadline - April 19, 2011. "\
                         "**At this time all saved abstracts are considered "\
                         "submitted in the form they are at that time.** You "\
                         "will be notified of the abstract review results by mid May, "\
