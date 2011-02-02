@@ -110,7 +110,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                                 description='The default presentation format '\
                                                 'is "Poster". If you wish to submit an abstract '\
                                                 'for a demonstration, please select the "Demo" '\
-                                                'option here.'
+                                                'option here.',
                                                 #format="radio",
                                                 slave_fields=({'name':'whyDemo',
                                                                'action': 'show',
