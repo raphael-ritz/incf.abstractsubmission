@@ -21,6 +21,8 @@ from Products.MasterSelectWidget.MasterSelectWidget import MasterSelectWidget
 from Products.ATExtensions import ateapi
 from Products.ATExtensions.Extensions.utils import getDisplayList
 
+from Products.WorkflowField import WorkflowField
+
 from incf.abstractsubmission.interfaces import IAbstract
 from incf.abstractsubmission.config import PROJECTNAME
 
@@ -142,6 +144,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('identifier',
                       write_permission=ReviewPortalContent,
                       ),
+    WorkflowField('submit'),
     ateapi.CommentField('closing',
                         comment="Make sure to save your abstract submission before you leave. "\
                         "Saved abstracts can be modified until the deadline of April 19, 2011.<br /> "\
@@ -170,6 +173,11 @@ AbstractSchema['image'].widget.description = "You have the option to include "\
                                              "to the size chosen below."
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
+AbstractSchema['submit'].widget.description = "If you have finalized your submission please "\
+                                              "choose 'Submit application' here. Once you have "\
+                                              "done that you will no longer be able to update your "\
+                                              "abstract. You still need to press 'save' "\
+                                              "though."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 AbstractSchema.moveField('title', after="intro")
