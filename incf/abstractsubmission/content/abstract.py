@@ -21,8 +21,6 @@ from Products.MasterSelectWidget.MasterSelectWidget import MasterSelectWidget
 from Products.ATExtensions import ateapi
 from Products.ATExtensions.Extensions.utils import getDisplayList
 
-# -*- Message Factory Imported Here -*-
-
 from incf.abstractsubmission.interfaces import IAbstract
 from incf.abstractsubmission.config import PROJECTNAME
 
