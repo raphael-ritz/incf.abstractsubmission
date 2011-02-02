@@ -43,29 +43,35 @@
           <metal:field use-macro="python:here.widget('introductionOpenAnonymous', mode='view')">
             Body text
           </metal:field>
+	  <h3>You need an INCF Account to submit an Abstract.</h3>
+	  <p>
+	  If you already have an INCF Account, please log in
+	  </p>
 	  <div class="formControls">
 		  <form id="login"
 			action="login_form"
 			method="post">
 		    <input class="context"
 			   type="submit"
-			   value="login"
+			   value="Log in"
 			   name="login">
 		  </form>
 	    <p>
 	    <a href="http://www.incf.org/mail_password_form"
-	       alt="Mail password form" class="link-plain">
-	    Forgot password?</a>
+	       alt="Mail password form" class="link-plain" target="_blank">
+	    Forgot your password?</a>
 	    </p>
+	    <p>&nbsp;</p>
 	    <p>
-	    If you do not have an INCF account please sign up first.
+	    Not already an INCF member? Please sign up before starting
+	    the submission process
 	    </p>
 		  <form id="register"
 			action="http://www.incf.org/join_form"
 			method="post">
 		    <input class="context"
 			   type="submit"
-			   value="sign up"
+			   value="Sign up"
 			   name="register">
 		  </form>
 	  </div>
@@ -77,21 +83,24 @@
           <metal:field use-macro="python:here.widget('introductionOpenAuthenticated', mode='view')">
             Body text
           </metal:field>
+	  <br />
 	  <div class="formControls">
 	      <form id="create"
 	            action="createObject"
 	            method="post">
 	      <input class="context"
 		     type="submit"
-		     value="New Abstract"
+		     value="Submit Abstract"
 		     name="create">
 	      <input class="hidden"
 		     type="hidden"
 		     name="type_name"
 		     value="Abstract">
 	      </form>
+	    <h3>Make sure your INCF Profile is up-to-date!</h3>
 	    <p>
-	    Please make sure that your profile data are up-to-date.
+	    The Abstract Submission form will be pre-populated with
+	    member data such as name, email and affiliation.
 	    </p>
 	    <form id="view_profile"
 	        action="http://www.incf.org/community/people/"
@@ -99,7 +108,7 @@
 	        tal:attributes="action view/profileUrl">
 	      <input class="context"
 	          type="submit"
-	          value="View INCF profile"
+	          value="View my INCF user profile"
 	          name="view_profile">
 	    </form>
 	  </div>

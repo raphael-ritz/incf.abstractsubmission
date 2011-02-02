@@ -82,12 +82,29 @@
 		</metal:field>)
 	  </span>
 	</div>
-
+	<br />
+	<div class="formControls">
+	  <form id="abstracts"
+	    action=".."
+	    method="post"
+	    tal:attributes="action here/aq_parent/absolute_url">
+	  <input class="context"
+	    type="submit"
+	    value="Return to Abstracts Section"
+	    name="abstracts">
+	  </form>
+	</div>
         <div metal:use-macro="here/document_relateditems/macros/relatedItems">
             show related items if they exist
         </div>
     
         <div tal:replace="structure provider:plone.belowcontentbody" />
+	</div>
+	<div>
+	  <a class="link-plain"
+	     href="../news/news/RSS">
+	  <img src="../++resource++congress2011.skin.images/rss.png" alt="RSS icon" />
+	  Latest news for Neuroinformatics 2011</a>
 	</div>
     </tal:main-macro>
 </metal:main>
