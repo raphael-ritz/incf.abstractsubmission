@@ -33,8 +33,8 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         "abstract should fit on one page (A4 or US letter format). "\
                         "Saved abstracts "\
                         "can be modified until the deadline - April 19, 2011. "\
-                        "**At this time all saved abstracts are considered "\
-                        "submitted in the form they are at that time.** You "\
+                        "**Once you finalize your abstract you need to explicitly "\
+                        "submit it for review by checking the 'submit' flag below**. You "\
                         "will be notified of the abstract review results by mid May, "\
                         "before the early registration deadline (June 1, 2011)."),
     ateapi.RecordsField('authors',
@@ -113,7 +113,8 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                                 'is "Poster". If you wish to submit an abstract '\
                                                 'for a demonstration, please select the "Demo" '\
                                                 'option here.',
-                                                #format="radio",
+                                                # as long as we use a MasterSelectWidget we cannot use 'radio'
+                                                format="radio",
                                                 slave_fields=({'name':'whyDemo',
                                                                'action': 'show',
                                                                'hide_values': ('Demo',),
@@ -123,7 +124,8 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       ),
     atapi.TextField('whyDemo',
                     widget=atapi.TextAreaWidget(label="Why Demo?",
-                                                description="Please give a "\
+                                                description="If you have chosen 'Demo' "\
+                                                "above: Please give a "\
                                                 "brief explanation of "\
                     "why your contribution would benefit from being demonstrated "\
                     "live rather than by a regular poster presentation.",
@@ -174,10 +176,12 @@ AbstractSchema['image'].widget.description = "You have the option to include "\
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
 AbstractSchema['submit'].widget.description = "If you have finalized your submission please "\
-                                              "choose 'Submit application' here. Once you have "\
+                                              "choose 'Submit abstarct' here. Once you have "\
                                               "done that you will no longer be able to update your "\
-                                              "abstract. You still need to press 'save' "\
-                                              "though."
+                                              "abstract (but you can still withdraw). "\
+                                              "If you want your abstract to be discarded select "\
+                                              "'Withdraw abstract'."\
+                                              "You need to press 'save' below for this to take effect."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 AbstractSchema.moveField('title', after="intro")
