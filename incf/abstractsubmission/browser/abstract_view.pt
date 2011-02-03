@@ -111,8 +111,7 @@
 	     target="_blank">
 	  <img
 	  src="../++resource++congress2011.skin.images/twitterlogo_16x15.png"
-	  alt="Twitter icon"
-	  height="18px" />
+	  alt="Twitter icon" />
 	  Follow INCF on Twitter</a>
 	</div>
     </tal:main-macro>
