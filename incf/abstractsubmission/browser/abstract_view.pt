@@ -112,7 +112,7 @@
 	  <img
 	  src="../++resource++congress2011.skin.images/twitter-icon.png"
 	  alt="Twitter icon"
-	  height="16px" />
+	  height="18px" />
 	  Follow INCF on Twitter</a>
 	</div>
     </tal:main-macro>
