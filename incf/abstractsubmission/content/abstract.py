@@ -29,12 +29,12 @@ from incf.abstractsubmission.config import PROJECTNAME
 AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('intro',
                         comment="You are welcome to submit more than one abstract. "\
-                        "The text (plus optional image) of each "\
-                        "abstract should fit on one page (A4 or US letter format). "\
+                        "The abstract (including the optional image) should fit on one page "\
+                        "(A4 or US letter format). To check this just print our abstract. "\
                         "Saved abstracts "\
                         "can be modified until the deadline - April 19, 2011. "\
                         "**Once you finalize your abstract you need to explicitly "\
-                        "submit it for review by checking the 'submit' flag below**. You "\
+                        "submit it for review by checking the submit flag below.** You "\
                         "will be notified of the abstract review results by mid May, "\
                         "before the early registration deadline (June 1, 2011)."),
     ateapi.RecordsField('authors',
@@ -64,8 +64,9 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     allowable_content_types=('text/html',),
                     widget=atapi.RichWidget(
                         rows=20,
-                        description="Please make sure that your text "\
-                        "and image can fit on one A4 or letter-size page. The image will be "\
+                        description="Length of text "\
+                        "and image should not exceed one A4 or letter-size page. "\
+                        "If you include an image, it will be "\
                         "displayed beneath the text followed by the image caption.",
                         filter_buttons=(
                             'bg-indent',
