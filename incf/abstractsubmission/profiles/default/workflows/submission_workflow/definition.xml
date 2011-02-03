@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <dc-workflow workflow_id="submission_workflow"
-             title="INCF Abstract Submission workflow" description=""
-             state_variable="review_state"
+             title="INCF Abstract Submission workflow"
+             description="" state_variable="review_state"
              initial_state="private">
  <permission>Access contents information</permission>
  <permission>Copy or Move</permission>
@@ -49,6 +49,7 @@
   <exit-transition transition_id="accept"/>
   <exit-transition transition_id="reject"/>
   <exit-transition transition_id="revise"/>
+  <exit-transition transition_id="withdraw"/>
   <permission-map name="Access contents information"
                   acquired="False">
    <permission-role>Manager</permission-role>
@@ -83,6 +84,7 @@
  </state>
  <state state_id="private" title="in preparation">
   <exit-transition transition_id="submit"/>
+  <exit-transition transition_id="withdraw"/>
   <permission-map name="Access contents information"
                   acquired="False">
    <permission-role>Manager</permission-role>
@@ -145,8 +147,52 @@
    <permission-role>Reviewer</permission-role>
   </permission-map>
  </state>
+ <state state_id="withdrawn" title="Withdrawn">
+  <exit-transition transition_id="submit"/>
+  <permission-map name="Access contents information"
+                  acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Copy or Move" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Delete objects" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents"
+                  acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content"
+                  acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Reply to item" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+ </state>
  <transition transition_id="accept"
-             title="Reviewer accepts application"
+             title="Reviewer accepts abstract"
              new_state="accepted" trigger="USER"
              before_script="" after_script="">
   <action url="" category="workflow">Accept</action>
@@ -164,7 +210,7 @@
   </guard>
  </transition>
  <transition transition_id="reject"
-             title="Reviewer rejects application"
+             title="Reviewer rejects abstract"
              new_state="rejected" trigger="USER"
              before_script="" after_script="">
   <action url="%(content_url)s/content_reject_form"
@@ -183,13 +229,23 @@
   </guard>
  </transition>
  <transition transition_id="submit"
-             title="Applicant submits application"
+             title="Applicant submits abstract"
              new_state="pending" trigger="USER"
              before_script="" after_script="">
   <action url="%(content_url)s/content_submit_form"
-          category="workflow">Submit application</action>
+          category="workflow">Submit abstract</action>
   <guard>
    <guard-permission>Request review</guard-permission>
+  </guard>
+ </transition>
+ <transition transition_id="withdraw"
+             title="Applicant withdraws abstract"
+             new_state="withdrawn" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">Withdraw abstract</action>
+  <guard>
+   <guard-role>Owner</guard-role>
+   <guard-role>Manager</guard-role>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
