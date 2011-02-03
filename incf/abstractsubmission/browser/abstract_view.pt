@@ -100,7 +100,7 @@
     
         <div tal:replace="structure provider:plone.belowcontentbody" />
 	</div>
-	<div>
+	<div class="customLinks">
 	  <a class="link-plain"
 	     href="../news/news/RSS">
 	  <img src="../++resource++congress2011.skin.images/rss.png" alt="RSS icon" />
