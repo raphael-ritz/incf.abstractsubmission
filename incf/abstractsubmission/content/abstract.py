@@ -180,7 +180,7 @@ AbstractSchema['submit'].widget.description = "If you have finalized your submis
                                               "done that you will no longer be able to update your "\
                                               "abstract (but you can still withdraw). "\
                                               "If you want your abstract to be discarded select "\
-                                              "'Withdraw abstract'."\
+                                              "'Withdraw abstract'. "\
                                               "You need to press 'save' below for this to take effect."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
