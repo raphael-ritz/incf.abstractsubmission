@@ -71,7 +71,7 @@
             Body text
           </metal:field>
 	</div>
-	<div>
+	<div tal:condition="python:here.portal_workflow.getInfoFor(here,'review_state')=='accepted' or False">
 	  <b>Session</b>:
           <metal:field use-macro="python:here.widget('sessionType', mode='view')">
             Body text
