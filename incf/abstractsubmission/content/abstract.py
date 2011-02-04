@@ -139,9 +139,9 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('identifier',
                       write_permission=ReviewPortalContent,
                       ),
-    WorkflowField('submit',
-                  write_permissiom=ReviewPortalContent,
-                  ),
+    ## WorkflowField('submit',
+    ##               write_permissiom=ReviewPortalContent,
+    ##               ),
     ateapi.CommentField('closing',
                         comment= \
                         "Submitted abstracts can be modified until the "\
@@ -165,9 +165,9 @@ AbstractSchema['image'].widget.description = "You have the option to include "\
                                              "to the size chosen below."
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
-AbstractSchema['submit'].widget.label="Reviewers"
-AbstractSchema['submit'].widget.description = "How did you decide to treat this abstract? "\
-                                              "You need to press 'submit' below for this to take effect."
+## AbstractSchema['submit'].widget.label="Reviewers"
+## AbstractSchema['submit'].widget.description = "How did you decide to treat this abstract? "\
+##                                               "You need to press 'submit' below for this to take effect."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 AbstractSchema.moveField('title', after="intro")
