@@ -166,7 +166,7 @@ AbstractSchema['image'].widget.description = "You have the option to include "\
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
 AbstractSchema['submit'].widget.label="Reviewers"
-AbstractSchema['submit'].widget.description = "How did you decide to treat this abstract?"\
+AbstractSchema['submit'].widget.description = "How did you decide to treat this abstract? "\
                                               "You need to press 'submit' below for this to take effect."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)

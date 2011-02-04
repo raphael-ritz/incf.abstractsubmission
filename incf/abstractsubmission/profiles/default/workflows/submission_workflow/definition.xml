@@ -235,7 +235,7 @@
   <action url="%(content_url)s/content_submit_form"
           category="workflow">Submit abstract</action>
   <guard>
-   <guard-permission>Request review</guard-permission>
+   <guard-permission>Manage portal</guard-permission>
   </guard>
  </transition>
  <transition transition_id="withdraw"
@@ -244,7 +244,6 @@
              before_script="" after_script="">
   <action url="" category="workflow">Withdraw abstract</action>
   <guard>
-   <guard-role>Owner</guard-role>
    <guard-role>Manager</guard-role>
   </guard>
  </transition>
