@@ -28,15 +28,9 @@ from incf.abstractsubmission.config import PROJECTNAME
 
 AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('intro',
-                        comment="You are welcome to submit more than one abstract. "\
-                        "The abstract (including the optional image) should fit on one page "\
-                        "(A4 or US letter format). To check this just print our abstract. "\
-                        "Saved abstracts "\
-                        "can be modified until the deadline - April 19, 2011. "\
-                        "**Once you finalize your abstract you need to explicitly "\
-                        "submit it for review by checking the submit flag below.** You "\
-                        "will be notified of the abstract review results by mid May, "\
-                        "before the early registration deadline (June 1, 2011)."),
+                        comment= "Saved abstracts can be modified until "\
+                        "the deadline - April 19, 2011. ",
+                        ),
     ateapi.RecordsField('authors',
                         subfields=('firstnames', 
                                    'lastname', 
@@ -64,10 +58,8 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     allowable_content_types=('text/html',),
                     widget=atapi.RichWidget(
                         rows=20,
-                        description="Length of text "\
-                        "and image should not exceed one A4 or letter-size page. "\
-                        "If you include an image, it will be "\
-                        "displayed beneath the text followed by the image caption.",
+                        description="We ask you to keep the abstract length "\
+                        "to around one page (A4 or US letter) or less, including image. ",
                         filter_buttons=(
                             'bg-indent',
                             'imagelibdrawer-button',
@@ -147,13 +139,13 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.StringField('identifier',
                       write_permission=ReviewPortalContent,
                       ),
-    WorkflowField('submit'),
+    WorkflowField('submit',
+                  write_permissiom=ReviewPortalContent,
+                  ),
     ateapi.CommentField('closing',
-                        comment="Make sure to save your abstract submission before you leave. "\
-                        "Saved abstracts can be modified until the deadline of April 19, 2011.<br /> "\
-                        "To return to your abstract, log in to the site and browse "\
-                        "to the 'Abstracts' section, or simply click on your name in the "\
-                        "upper right-hand corner."),
+                        comment= \
+                        "Submitted abstracts can be modified until the "\
+                        "deadline - April 19, 2011."),
 ))
 
 # Set storage on fields copied from ATContentTypeSchema, making sure
@@ -162,10 +154,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 AbstractSchema['title'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].storage = atapi.AnnotationStorage()
 AbstractSchema['description'].schemata = 'categorization'
-AbstractSchema['authors'].widget.description = "Information for the first author is "\
-                                               "pre-populated from your INCF profile. "\
-                                               "Any changes made here it will NOT "\
-                                               "be saved to your profile. Please add "\
+AbstractSchema['authors'].widget.description = "Please add "\
                                                "additional authors in the order in "\
                                                "which they should be displayed."
 AbstractSchema['image'].widget.description = "You have the option to include "\
@@ -176,13 +165,9 @@ AbstractSchema['image'].widget.description = "You have the option to include "\
                                              "to the size chosen below."
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
-AbstractSchema['submit'].widget.description = "If you have finalized your submission please "\
-                                              "choose 'Submit abstarct' here. Once you have "\
-                                              "done that you will no longer be able to update your "\
-                                              "abstract (but you can still withdraw). "\
-                                              "If you want your abstract to be discarded select "\
-                                              "'Withdraw abstract'. "\
-                                              "You need to press 'save' below for this to take effect."
+AbstractSchema['submit'].widget.label="Reviewers"
+AbstractSchema['submit'].widget.description = "How did you decide to treat this abstract?"\
+                                              "You need to press 'submit' below for this to take effect."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 AbstractSchema.moveField('title', after="intro")
