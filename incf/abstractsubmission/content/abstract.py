@@ -134,7 +134,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                                   description='Check box if you would '\
                                                   'like to be considered for the '\
                                                   'student/post-doctoral travel award. '\
-                                                  '(<a href="../about/travel-awards" target="_blank">'\
+                                                  '(<a href="/about/travel-awards" target="_blank">'\
                                                   'Information on eligibility and requirements</a>)',
                                                   ),
                        ),
