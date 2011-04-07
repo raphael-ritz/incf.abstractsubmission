@@ -129,6 +129,15 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       required=1,
                       widget=atapi.SelectionWidget(format="radio"),
                       ),
+    atapi.BooleanField('travelAward',
+                       widget=atapi.BooleanWidget(label='Travel Award',
+                                                  description='Check box if you would '\
+                                                  'like to be considered for the '\
+                                                  'student/post-doctoral travel award. '\
+                                                  '(<a href="../about/travel-awards" target="_blank">'\
+                                                  'Information on eligibility and requirements</a>)',
+                                                  ),
+                       ),
     atapi.LinesField('sessionType',
                      multivalued=True,
                      vocabulary='getSessionTypes',
