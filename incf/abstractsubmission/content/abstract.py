@@ -45,7 +45,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         subfield_sizes={'firstnames': 20,
                                         'lastname': 25,
                                         'email': 30,
-                                        'affiliation': 40,
+                                        'affiliation': 60,
                                         },
                         minimalSize=5,
                         default_method='defaultAuthor',
