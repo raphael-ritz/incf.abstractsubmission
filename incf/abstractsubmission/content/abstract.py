@@ -32,7 +32,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         "the deadline - April 19, 2011. ",
                         ),
     ateapi.RecordsField('authors',
-                        searchable=1,
+#                        searchable=1,   # doesn't work for records fields :-(
                         required=1,
                         subfields=('firstnames', 
                                    'lastname', 
