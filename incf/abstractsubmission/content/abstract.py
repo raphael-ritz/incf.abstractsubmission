@@ -29,7 +29,7 @@ from incf.abstractsubmission.config import PROJECTNAME
 AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('intro',
                         comment= "Submitted abstracts can be modified until "\
-                        "the deadline - April 19, 2011. ",
+                        "the deadline - April 27, 2011. ",
                         ),
     ateapi.RecordsField('authors',
                         searchable=1,
@@ -162,7 +162,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('closing',
                         comment= \
                         "Submitted abstracts can be modified until the "\
-                        "deadline - April 19, 2011."),
+                        "deadline - April 27, 2011."),
 ))
 
 # Set storage on fields copied from ATContentTypeSchema, making sure
