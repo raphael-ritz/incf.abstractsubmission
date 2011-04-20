@@ -36,6 +36,8 @@
 		<a href="" 
 		   tal:attributes="href abstract/getURL"
 		   tal:content="abstract/Title">title</a>
+	        <span tal:condition="view/showRating"
+	              tal:replace="structure python:view.rating(abstract)">rating</span>
 		<br />
 		<span class="discreet" tal:content="abstract/Description">authors</span>
 	      </li>

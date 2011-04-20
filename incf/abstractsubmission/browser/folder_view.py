@@ -1,5 +1,7 @@
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
+from contentratings.interfaces import IUserRating
+
 
 class FolderView(BrowserView):
     """Various UI methods"""
@@ -7,12 +9,15 @@ class FolderView(BrowserView):
     @property
     def catalog(self):
         return getToolByName(self.context, 'portal_catalog')
+
+    @property
+    def membertool(self):
+        return getToolByName(self.context, 'portal_membership')
     
     @property
     def isAnonymous(self):
         """True if user is anonymous False otherwise"""
-        membertool = getToolByName(self.context, 'portal_membership')
-        return membertool.isAnonymousUser()
+        return self.membertool.isAnonymousUser()
 
     def getAbstractsByTopic(self, topic):
         """All abstracts for a given topic"""
@@ -31,8 +36,7 @@ class FolderView(BrowserView):
 
     def profileUrl(self):
         """URL to profile page at main site for current user"""
-        membertool = getToolByName(self.context, 'portal_membership')
-        userid = membertool._getSafeMemberId()
+        userid = self.membertool._getSafeMemberId()
         return "http://www.incf.org/community/people/%s" % userid
 
 # XXX should we @memoize this?
@@ -48,3 +52,20 @@ class FolderView(BrowserView):
     def headline(self, topic):
         """Name of topic followed by abstract count in parentheses"""
         return "%s (%s)" % (topic, self.getTopicCount(topic))
+
+    def showRating(self):
+        """Review portal content is needed to see the rating"""
+        return self.membertool.checkPermission('Review portal content', self.context)
+
+    def rating(self, abstract_brain):
+        """Return an HTML snippet including the formated rating"""
+        abstract = abstract_brain.getObject()
+        rated = IUserRating(abstract)
+        average = float(rated.averageRating)
+        number = rated.numberOfRatings
+        if number == 0:
+            rating = "(<span class='not-rated'>not rated</span>)"
+        else:
+            rating = "(<span class='rating-%d'>%2.2f (%s)</span>)" % (round(average), average, number)
+        return rating
+        
