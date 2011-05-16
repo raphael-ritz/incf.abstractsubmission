@@ -16,6 +16,7 @@ if user:
     user_email = user.getProperty('email')
     from_email = object.portal_url.getPortalObject().getProperty('email_from_address')
     from_name = object.portal_url.getPortalObject().getProperty('email_from_name')
+    # XXX should there be a cc?
     
     subject = "Your submission to neuroinformatics 2011 has been accepted"
     
