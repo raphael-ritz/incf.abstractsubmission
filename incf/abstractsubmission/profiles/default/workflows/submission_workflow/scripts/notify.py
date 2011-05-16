@@ -8,7 +8,7 @@
 ##title=
 ##
 object = state_change.object
-mailhost = object.mailhost
+mailhost = object.MailHost
 
 user = context.portal_membership.getMemberById(object.Creator())  # is Creator the right thing to use here?
 
