@@ -11,9 +11,11 @@
  <permission>Reply to item</permission>
  <permission>View</permission>
  <state state_id="accepted" title="Accepted">
+  <exit-transition transition_id="publish"/>
   <exit-transition transition_id="reconsider"/>
   <permission-map name="Access contents information"
                   acquired="False">
+   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reviewer</permission-role>
@@ -26,20 +28,22 @@
   </permission-map>
   <permission-map name="List folder contents"
                   acquired="False">
+   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reviewer</permission-role>
   </permission-map>
   <permission-map name="Modify portal content"
                   acquired="False">
+   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Reply to item" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reviewer</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reviewer</permission-role>
@@ -113,6 +117,39 @@
    <permission-role>Owner</permission-role>
   </permission-map>
  </state>
+ <state state_id="published" title="Published">
+  <exit-transition transition_id="reconsider"/>
+  <exit-transition transition_id="revise"/>
+  <exit-transition transition_id="withdraw"/>
+  <permission-map name="Access contents information"
+                  acquired="False">
+   <permission-role>Anonymous</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Copy or Move" acquired="True">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Delete objects" acquired="True">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents"
+                  acquired="True">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content"
+                  acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Reply to item" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Anonymous</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
  <state state_id="rejected" title="Rejected">
   <exit-transition transition_id="reconsider"/>
   <permission-map name="Access contents information"
@@ -151,7 +188,6 @@
   <exit-transition transition_id="submit"/>
   <permission-map name="Access contents information"
                   acquired="False">
-   <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -167,7 +203,6 @@
   </permission-map>
   <permission-map name="List folder contents"
                   acquired="False">
-   <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -175,7 +210,6 @@
   </permission-map>
   <permission-map name="Modify portal content"
                   acquired="False">
-   <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -184,7 +218,6 @@
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
-   <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -196,6 +229,15 @@
              new_state="accepted" trigger="USER"
              before_script="" after_script="">
   <action url="" category="workflow">Accept</action>
+  <guard>
+   <guard-permission>Manage portal</guard-permission>
+  </guard>
+ </transition>
+ <transition transition_id="publish" title="Publish"
+             new_state="published" trigger="USER"
+             before_script="" after_script="">
+  <description>Make it available to all</description>
+  
   <guard>
    <guard-permission>Manage portal</guard-permission>
   </guard>
@@ -233,7 +275,7 @@
              new_state="pending" trigger="USER"
              before_script="" after_script="">
   <action url="%(content_url)s/content_submit_form"
-          category="workflow">Submit abstract</action>
+          category="workflow">Start review</action>
   <guard>
    <guard-permission>Manage portal</guard-permission>
   </guard>
