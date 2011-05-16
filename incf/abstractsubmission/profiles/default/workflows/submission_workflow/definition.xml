@@ -11,6 +11,7 @@
  <permission>Reply to item</permission>
  <permission>View</permission>
  <state state_id="accepted" title="Accepted">
+  <exit-transition transition_id="notify"/>
   <exit-transition transition_id="publish"/>
   <exit-transition transition_id="reconsider"/>
   <permission-map name="Access contents information"
@@ -233,6 +234,15 @@
    <guard-permission>Manage portal</guard-permission>
   </guard>
  </transition>
+ <transition transition_id="notify" title="Notify author"
+             new_state="" trigger="USER" before_script=""
+             after_script="">
+  <description>Send email to author with info about acceptance and type of presentation including presentation id.</description>
+  <action url="" category="workflow">Notify author</action>
+  <guard>
+   <guard-permission>Manage portal</guard-permission>
+  </guard>
+ </transition>
  <transition transition_id="publish" title="Publish"
              new_state="published" trigger="USER"
              before_script="" after_script="">
@@ -350,4 +360,7 @@
   <guard>
   </guard>
  </variable>
+ <script script_id="notify" type="Script (Python)"
+         filename="workflows/submission_workflow/scripts/notify.py"
+         module="" function=""/>
 </dc-workflow>
