@@ -9,7 +9,7 @@ except ImportError:  # python <= 2.4
 from urllib import urlopen
 
 from zope.interface import implements
-
+from DateTime import DateTime
 from Products.CMFCore.permissions import ReviewPortalContent
 
 from Products.Archetypes import atapi
@@ -206,6 +206,9 @@ class Abstract(base.ATCTContent):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
 
+    # class defaults
+    _notified = None
+
     def Description(self):
         """Override description accessor to return author list"""
         return self.formatAuthors()
@@ -277,5 +280,12 @@ class Abstract(base.ATCTContent):
         """
         return self.getField('image').tag(self, **kwargs)
 
+    def notified(self):
+        """Date of last notification or None"""
+        return self._notified
+
+    def setNotificationDate(self):
+        """Sets notification date to current time"""
+        self._notified = DateTime()
 
 atapi.registerType(Abstract, PROJECTNAME)
