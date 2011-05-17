@@ -6,6 +6,9 @@ from StringIO import StringIO
 from zope.interface import implements
 from contentratings.interfaces import IUserRating
 
+from AccessControl import ClassSecurityInfo
+from Products.CMFCore.permissions import ManagePortal
+
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import folder
 from Products.ATContentTypes.content import schemata
@@ -91,6 +94,8 @@ schemata.finalizeATCTSchema(
 class SubmissionFolder(folder.ATBTreeFolder):
     """Section for Abstract submissions"""
     implements(ISubmissionFolder)
+
+    security = ClassSecurityInfo()
 
     meta_type = "SubmissionFolder"
     schema = SubmissionFolderSchema
@@ -192,6 +197,27 @@ class SubmissionFolder(folder.ATBTreeFolder):
     def displayContentsTab(self):
         """Suppress the default Contents tab"""
         return False
+
+    security.declareProtected(ManagePortal, 'setSessionFromId')
+    def setSessionFromId(self):
+        """Helper method inferring session from given id.
+        Based on heuristics applicable at the time of writing
+        Warning: this resets the session(s) assigned"""
+
+        abstracts = self.contentValues()
+        for abstract in abstracts:
+            id = abstract.getIdentifier()
+            if not id:
+                continue
+            id = id.lower()
+            if id.startswith('d'):
+                abstract.setSessionType(['Demo Session'])
+            elif id[-1] in ['0','2','4','6','8']:
+                abstract.setSessionType(['Poster Session 2'])
+            else:
+                abstract.setSessionType(['Poster Session 1'])
+                
+
                       
 
 atapi.registerType(SubmissionFolder, PROJECTNAME)
