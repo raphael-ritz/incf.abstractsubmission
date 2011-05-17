@@ -16,26 +16,25 @@ if user:
     user_email = user.getProperty('email')
     from_email = object.portal_url.getPortalObject().getProperty('email_from_address')
     from_name = object.portal_url.getPortalObject().getProperty('email_from_name')
-    # XXX should there be a cc?
     
     subject = "Your submission to neuroinformatics 2011 has been accepted"
+
+    cc = from_email
+
+    data = {'name': user.getProperty('fullname'),
+            'title': object.Title(),
+            'id': object.getIdentifier(),
+            'session': ' and '.join(object.getSessionType()),
+            'sender': from_name,
+            }
+
+    body = object.getAcceptanceLetterText()   
+
+    message = body%data 
     
-    name = user.getProperty('fullname')
-    message = "Hello " + name
-    message += '\n'
-    message += "Your contribution " 
-    message += object.Title()
-    message += " has been accepted for presentation at the INCF Neuroinformatics Congress 2011. "
-    message += '\n'
-    message += object.absolute_url()
-    message += '\n'
-    message += """
-    
-    Kind regards, 
-    """
-    message += from_name
-    
-    mailhost.secureSend(message, user_email, from_email, subject = subject)
+    mailhost.secureSend(message, user_email, from_email, subject = subject, mcc = cc)
+
+    object.setNotificationDate()
 
 else:
     print "No user found"

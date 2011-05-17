@@ -236,11 +236,12 @@
  </transition>
  <transition transition_id="notify" title="Notify author"
              new_state="" trigger="USER" before_script=""
-             after_script="">
+             after_script="notify">
   <description>Send email to author with info about acceptance and type of presentation including presentation id.</description>
   <action url="" category="workflow">Notify author</action>
   <guard>
    <guard-permission>Manage portal</guard-permission>
+   <guard-expression>python:here.notified() is None</guard-expression>
   </guard>
  </transition>
  <transition transition_id="publish" title="Publish"
