@@ -8,6 +8,7 @@ from contentratings.interfaces import IUserRating
 
 from AccessControl import ClassSecurityInfo
 from Products.CMFCore.permissions import ManagePortal
+from Products.CMFCore.utils import getToolByName
 
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import folder
@@ -216,8 +217,34 @@ class SubmissionFolder(folder.ATBTreeFolder):
                 abstract.setSessionType(['Poster Session 2'])
             else:
                 abstract.setSessionType(['Poster Session 1'])
-                
 
-                      
+    security.declareProtected(ManagePortal, 'notifyAllAccepted')
+    def notifyAllAccepted(self):
+        """Notify authors of ALL accepted abstracts that have not been
+        notified yet by triggering the 'notify' transition"""
+
+        template = "****** Notified author of %s - <a href='%s'>%s</a><br />\n"
+
+        out = StringIO()
+        wft = getToolByName(self, 'portal_workflow')
+        abstracts = self.contentValues()
+        
+        for abstract in abstracts:
+            state = wft.getInfoFor(abstract, 'review_state')
+            if state not in ['accepted']:
+                out.write("not accepted: skipping %s<br />\n" % abstract.absolute_url())
+                continue
+            notified = abstract.notified()
+            if notified is not None:
+                out.write("already notified: skipping %s<br />\n" % abstract.absolute_url())
+                continue
+            wft.doActionFor(abstract, 'notify')
+            out.write(template % (abstract.getIdentifier(),
+                                  abstract.absolute_url(),
+                                  abstract.Title(),
+                                  ))
+        value = out.getvalue()
+        out.close()
+        return value
 
 atapi.registerType(SubmissionFolder, PROJECTNAME)
