@@ -16,14 +16,15 @@ if user:
     user_email = user.getProperty('email')
     from_email = object.portal_url.getPortalObject().getProperty('email_from_address')
     from_name = object.portal_url.getPortalObject().getProperty('email_from_name')
-    
-    subject = "Your submission to neuroinformatics 2011 has been accepted"
+
+    id = object.getIdentifier()
+    subject = "Your submission to neuroinformatics 2011 has been accepted (%s)" % id
 
     cc = from_email
 
     data = {'name': user.getProperty('fullname'),
             'title': object.Title(),
-            'id': object.getIdentifier(),
+            'id': id,
             'session': ' and '.join(object.getSessionType()),
             'sender': from_name,
             }
