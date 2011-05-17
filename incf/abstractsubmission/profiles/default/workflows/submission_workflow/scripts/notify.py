@@ -22,10 +22,17 @@ if user:
 
     cc = from_email
 
+    session = ' and '.join(object.getSessionType())
+    if session == 'Poster Session 1':
+        session = '1 (September 4)'
+
+    if session == 'Poster Session 2':
+        session = '2 (September 5)'
+
     data = {'name': user.getProperty('fullname'),
             'title': object.Title(),
             'id': id,
-            'session': ' and '.join(object.getSessionType()),
+            'session': session,
             'sender': from_name,
             }
 
