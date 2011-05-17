@@ -40,6 +40,11 @@
 	              tal:replace="structure python:view.rating(abstract)">rating</span>
 	        <span tal:condition="view/showRating"
 	              tal:content="abstract/review_state">review state</span>
+	        <span tal:condition="view/showRating"
+	              tal:define="abs abstract/getObject"
+	              tal:content="abs/getIdentifier">id</span>
+	        <span tal:condition="view/showRating"
+	              tal:content="structure python:view.notified(abstract)">notification date</span>
 		<br />
 		<span class="discreet" tal:content="abstract/Description">authors</span>
 	      </li>

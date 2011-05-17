@@ -68,4 +68,12 @@ class FolderView(BrowserView):
         else:
             rating = "(<span class='rating-%d'>%2.2f (%s)</span>)" % (round(average), average, number)
         return rating
+
+    def notified(self, abstract_brain):
+        """Return an HTML snippet including the notification info"""
+        abstract = abstract_brain.getObject()
+        notified = abstract.notified()
+        if notified is None:
+            return "(No notification send)"
+        return "(notified: %s)" % notified
         
