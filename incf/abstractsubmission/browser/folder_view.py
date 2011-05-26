@@ -91,6 +91,8 @@ class FolderView(BrowserView):
             abstracts.extend(self.getAbstractsByTopic(topic, 'getIdentifier'))
 
         for abstract in abstracts:
+            if abstract.review_state not in ['accepted', 'published']:
+                continue
             abstract = abstract.getObject()
             out.write(abstract.abstractBookSource())
             out.write(separator)
