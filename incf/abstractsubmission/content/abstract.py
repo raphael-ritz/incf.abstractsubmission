@@ -297,6 +297,8 @@ class Abstract(base.ATCTContent):
         text = text.replace(' \r\n ', dummy)
         text = text.replace('\r\n', ' ')
         text = text.replace(dummy, ' \r\n ')
+        while '  ' in text:
+            text = text.replace('  ', ' ')
 
         return text
 
@@ -307,6 +309,9 @@ class Abstract(base.ATCTContent):
         lines.append("%s %s" % (self.getIdentifier(), self.Title()))
         lines.append(self.formatAuthors())
         lines.append(self.getPlainText())
+        if self.getImage():
+            lines.append("%s_image\r\n%s\r\n" % (self.getIdentifier(),
+                                                 self.getImageCaption()))
 
         return separator.join(lines)
 

@@ -81,7 +81,7 @@ class FolderView(BrowserView):
         
     # plain text export for the abstract book
     
-    def abstractBookSource(self, separator='\n\n'):
+    def abstractBookSource(self, separator='\r\n\r\n'):
         """Malin and Helena will take it from here"""
 
         out = StringIO()
