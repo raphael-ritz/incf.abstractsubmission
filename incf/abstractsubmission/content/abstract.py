@@ -290,12 +290,23 @@ class Abstract(base.ATCTContent):
 
     # for the abstract book
 
+    def getPlainText(self):
+        """helper method for custom plain text formating"""
+        text = self.getAbstract(mimetype='text/plain')
+        dummy = '%$%$%'
+        text = text.replace(' \r\n ', dummy)
+        text = text.replace('\r\n', ' ')
+        text = text.replace(dummy, ' \r\n ')
+
+        return text
+
     def abstractBookSource(self, separator='\n\n'):
         """Custom plain text format to be consumed by Malin and Helena"""
 
         lines = []
         lines.append("%s %s" % (self.getIdentifier(), self.Title()))
         lines.append(self.formatAuthors())
+        lines.append(self.getPlainText())
 
         return separator.join(lines)
 
