@@ -1,3 +1,4 @@
+from StringIO import StringIO
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from contentratings.interfaces import IUserRating
@@ -19,11 +20,11 @@ class FolderView(BrowserView):
         """True if user is anonymous False otherwise"""
         return self.membertool.isAnonymousUser()
 
-    def getAbstractsByTopic(self, topic):
+    def getAbstractsByTopic(self, topic, sort_on="created"):
         """All abstracts for a given topic"""
         return self.catalog(portal_type="Abstract", 
                             Subject=topic,
-                            sort_on="created",
+                            sort_on=sort_on,
                             )   # XXX maybe add a path constraint?
 
     def getAbstractsForCurrentMember(self):
@@ -76,4 +77,25 @@ class FolderView(BrowserView):
         if notified is None:
             return "(No notification send)"
         return "(notified: %s)" % notified
+
+        
+    # plain text export for the abstract book
+    
+    def abstractBookSource(self, separator='\n\n'):
+        """Malin and Helena will take it from here"""
+
+        out = StringIO()
+        abstracts = []
+        topics = self.context.getTopics()
+        for topic in topics:
+            abstracts.extend(self.getAbstractsByTopic(topic, 'getIdentifier'))
+
+        for abstract in abstracts:
+            abstract = abstract.getObject()
+            out.write(abstract.abstractBookSource())
+            out.write(separator)
+            
+        value = out.getvalue()
+        out.close()
+        return value
         

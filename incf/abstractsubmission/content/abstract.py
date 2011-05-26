@@ -223,9 +223,9 @@ class Abstract(base.ATCTContent):
         strings = []
         for author in authors:
             strings.append("%s %s (%s)" % (author.get('firstnames'),
-                                               author.get('lastname'),
-                                               author.get('affiliation'),
-                                               ))
+                                           author.get('lastname'),
+                                           author.get('affiliation'),
+                                           ))
         return separator.join(strings)
 
     def CountryNames(self, instance):
@@ -287,5 +287,16 @@ class Abstract(base.ATCTContent):
     def setNotificationDate(self):
         """Sets notification date to current time"""
         self._notified = DateTime()
+
+    # for the abstract book
+
+    def abstractBookSource(self, separator='\n\n'):
+        """Custom plain text format to be consumed by Malin and Helena"""
+
+        lines = []
+        lines.append("%s %s" % (self.getIdentifier(), self.Title()))
+        lines.append(self.formatAuthors())
+
+        return separator.join(lines)
 
 atapi.registerType(Abstract, PROJECTNAME)
