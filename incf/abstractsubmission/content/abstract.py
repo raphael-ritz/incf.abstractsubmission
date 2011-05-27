@@ -313,6 +313,63 @@ class Abstract(base.ATCTContent):
             lines.append(l)
         return separator.join(lines)
 
+    def getAuthorAndAffiliationInfo(self):
+        """Helper method to cast the author info something more consumable"""
+
+        authors = self.getAuthors()
+        # get the trivial case out of the way
+        if len(authors) == 1:
+            authorstring = "%(firstnames)s %(lastname)s" % authors[0]
+            affiliation = authors[0].get('affiliation')
+            return authorstring, [affiliation]
+
+        affiliations = [a.get('affiliation') for a in authors]
+        # all affiliations the same
+        if len(set(affiliations)) == 1:
+            authorstring = self.getAuthorsString(authors, addNumbers=False)
+            affiliation = authors[0].get('affiliation')
+            return authorstring, [affiliation]
+
+        authors = self.addAffiliationIndex(authors, affiliations)
+
+        # several authors, several affiliations
+        authorstring = self.getAuthorsString(authors, addNumbers=True)
+        affiliationlist = self.getAffiliationList(affiliations)
+        return authorstring, affiliationlist
+
+    def getAuthorsString(self, authors, addNumbers=False):
+        if addNumbers:
+            authorlist = ["%(firstnames)s %(lastname)s%(affiliation_index)s" % a \
+                          for a in authors]
+        else:
+            authorlist = ["%(firstnames)s %(lastname)s" % a for a in authors]
+        # the trivial case - one author is handled already
+        if len(authorlist) == 2:
+            return ' and '.join(authorlist)
+        l1 = authorlist[:-1]
+        return ', '.join(l1) + ' and ' + authorlist[-1]
+
+    def addAffiliationIndex(self, authors, affiliations):
+        index_map = self.getAffiliationList(affiliations, mapping = True)
+        for a in authors:
+            a['affiliation_index'] = index_map[a.get('affiliation')]
+        return authors   # assuming the change is picked up
+
+    def getAffiliationList(self, affiliations, mapping=False):
+        """Filter out duplicates and add numbers in front.
+        If 'mapping' is true, return a dictionary
+        'affiliation' -> 'index' instead"""
+        seen = []
+        result = []
+        index = 0
+        result_map = {}
+        for a in affiliations:
+            if a not in seen:
+                seen.append(a)
+                index += 1
+                result.append('%s. %s' % (index, a))
+                result_map[a] = index
+        return mapping and result_map or result
 
     def abstractBookSource(self, separator='\n\n'):
         """Custom plain text format to be consumed by Malin and Helena"""
