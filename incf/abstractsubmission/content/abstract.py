@@ -371,12 +371,14 @@ class Abstract(base.ATCTContent):
                 result_map[a] = index
         return mapping and result_map or result
 
-    def abstractBookSource(self, separator='\n\n'):
+    def abstractBookSource(self, separator='\r\n\r\n'):
         """Custom plain text format to be consumed by Malin and Helena"""
 
         lines = []
         lines.append("%s %s" % (self.getIdentifier(), self.Title()))
-        lines.append(self.formatAuthors())
+        #lines.append(self.formatAuthors())  # uncomment for sanity checking 
+        authors, affiliations = self.getAuthorAndAffiliationInfo()
+        lines.append('\r\n'.join([authors]+affiliations))
         lines.append(self.getPlainText())
         if self.getImage():
             lines.append("%s_image\r\n%s\r\n" % (self.getIdentifier(),
