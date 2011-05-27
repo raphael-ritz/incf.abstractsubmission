@@ -47,4 +47,20 @@
 	permission="cmf.ManagePortal"
 	/>
 
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="authorIndex"
+	class="incf.abstractsubmission.browser.folder_view.FolderView"
+	attribute="authorIndex"
+	permission="cmf.ManagePortal"
+	/>
+
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="sessionIndex"
+	class="incf.abstractsubmission.browser.folder_view.FolderView"
+	attribute="sessionIndex"
+	permission="cmf.ManagePortal"
+	/>
+
 </configure>

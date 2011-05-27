@@ -100,4 +100,63 @@ class FolderView(BrowserView):
         value = out.getvalue()
         out.close()
         return value
-        
+
+    # support the various indexes
+
+    def authorIndex(self):
+        """Author followed by comma separated list of abstract ids;
+        one per line"""
+
+        data = {}
+        topics = self.context.getTopics()
+        # get abstracts in the order of appearance in the abstract book - hopefully
+        for topic in topics:
+            for abstract in self.getAbstractsByTopic(topic, sort_on='getIdentifier'):
+                if abstract.review_state not in ['accepted', 'published']:
+                    continue
+                obj = abstract.getObject()
+                authors = obj.getAuthors()
+                id = obj.getIdentifier()
+                for author in authors:
+                    a = "%(lastname)s, %(firstnames)s" % author
+                    a = a.strip()
+                    try: 
+                        value = data[a]
+                    except KeyError:
+                        value = []
+                    value.append(id)
+                    data[a] = value
+
+        result = StringIO()
+        keys = data.keys()
+        keys.sort()
+        for k in keys:
+            result.write('%s\t%s\r\n' % (k, ', '.join(data[k])))
+        value = result.getvalue()
+        result.close()
+        return value
+
+    def sessionIndex(self, separator='\r\n'):
+        """Contributions groups by session and sorted by id within"""
+
+        # XXX how would one get the order if sessions are just taken from the
+        # catalog as well?
+        sessions = ['Demo Session', 'Poster Session 1', 'Poster Session 2']
+
+        data = []
+
+        for session in sessions:
+            data.append(separator + session + separator)
+            abstracts = self.catalog(portal_type='Abstract',
+                                     review_state=['accepted', 'published'],
+                                     getSessionType=session,
+                                     sort_on='getIdentifier',
+                                     )
+            for abstract in abstracts:
+                authors = abstract.getObject().getAuthors()
+                id = abstract.getObject().getIdentifier()
+                authorinfo = authors[0]
+                authorinfo['id'] = id
+                data.append("%(id)s %(lastname)s, %(firstnames)s" % authorinfo)
+
+        return separator.join(data)
