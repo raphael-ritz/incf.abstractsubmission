@@ -7,6 +7,7 @@ except ImportError:  # python <= 2.4
     import simplejson as json
 
 from urllib import urlopen
+from StringIO import StringIO
 
 from zope.interface import implements
 from DateTime import DateTime
@@ -294,13 +295,24 @@ class Abstract(base.ATCTContent):
         """helper method for custom plain text formating"""
         text = self.getAbstract(mimetype='text/plain')
         dummy = '%$%$%'
+        text = text.replace('&nbsp;', ' ')   # in case this survived
         text = text.replace(' \r\n ', dummy)
         text = text.replace('\r\n', ' ')
         text = text.replace(dummy, ' \r\n ')
-        while '  ' in text:
-            text = text.replace('  ', ' ')
+        
+        return self.normalizeWhitespace(text)
 
-        return text
+    def normalizeWhitespace(self, text, separator='\r\n'):
+        lines = []
+        for line in StringIO(text):
+            l = line.strip()
+            if not l:    # skip empty lines
+                continue
+            while '  ' in l:
+                l = l.replace('  ', ' ')
+            lines.append(l)
+        return separator.join(lines)
+
 
     def abstractBookSource(self, separator='\n\n'):
         """Custom plain text format to be consumed by Malin and Helena"""
