@@ -63,4 +63,12 @@
 	permission="cmf.ManagePortal"
 	/>
 
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="topicIndex"
+	class="incf.abstractsubmission.browser.folder_view.FolderView"
+	attribute="topicIndex"
+	permission="cmf.ManagePortal"
+	/>
+
 </configure>

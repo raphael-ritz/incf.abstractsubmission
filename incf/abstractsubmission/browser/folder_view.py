@@ -20,11 +20,12 @@ class FolderView(BrowserView):
         """True if user is anonymous False otherwise"""
         return self.membertool.isAnonymousUser()
 
-    def getAbstractsByTopic(self, topic, sort_on="created"):
+    def getAbstractsByTopic(self, topic, sort_on="created", **kw):
         """All abstracts for a given topic"""
         return self.catalog(portal_type="Abstract", 
                             Subject=topic,
                             sort_on=sort_on,
+                            **kw
                             )   # XXX maybe add a path constraint?
 
     def getAbstractsForCurrentMember(self):
@@ -152,6 +153,27 @@ class FolderView(BrowserView):
                                      getSessionType=session,
                                      sort_on='getIdentifier',
                                      )
+            for abstract in abstracts:
+                authors = abstract.getObject().getAuthors()
+                id = abstract.getObject().getIdentifier()
+                authorinfo = authors[0]
+                authorinfo['id'] = id
+                data.append("%(id)s %(lastname)s, %(firstnames)s" % authorinfo)
+
+        return separator.join(data)
+
+    def topicIndex(self, separator='\r\n'):
+        """Contributions grouped by category"""
+
+        topics = self.context.getTopics()
+        data = []
+        
+        for topic in topics:
+            data.append(separator + topic + separator)
+            abstracts = self.getAbstractsByTopic(topic,
+                                                 sort_on='getIdentifier',
+                                                 review_state=['accepted', 'published'],
+                                                 )
             for abstract in abstracts:
                 authors = abstract.getObject().getAuthors()
                 id = abstract.getObject().getIdentifier()
