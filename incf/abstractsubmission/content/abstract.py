@@ -314,7 +314,7 @@ class Abstract(base.ATCTContent):
         return separator.join(lines)
 
     def getAuthorAndAffiliationInfo(self):
-        """Helper method to cast the author info something more consumable"""
+        """Helper method to cast the author info into something more consumable"""
 
         authors = self.getAuthors()
         # get the trivial case out of the way
