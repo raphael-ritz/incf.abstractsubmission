@@ -106,27 +106,27 @@ class FolderView(BrowserView):
 
     def authorIndex(self):
         """Author followed by comma separated list of abstract ids;
-        one per line"""
+        one per line sorted on last name"""
 
         data = {}
-        topics = self.context.getTopics()
-        # get abstracts in the order of appearance in the abstract book - hopefully
-        for topic in topics:
-            for abstract in self.getAbstractsByTopic(topic, sort_on='getIdentifier'):
-                if abstract.review_state not in ['accepted', 'published']:
-                    continue
-                obj = abstract.getObject()
-                authors = obj.getAuthors()
-                id = obj.getIdentifier()
-                for author in authors:
-                    a = "%(lastname)s, %(firstnames)s" % author
-                    a = a.strip()
-                    try: 
-                        value = data[a]
-                    except KeyError:
-                        value = []
-                    value.append(id)
-                    data[a] = value
+        contributions = self.catalog(portal_type=['Abstract', 'Speaker'])
+        for abstract in contributions:
+            if abstract.review_state not in ['accepted', 'published']:
+                continue
+            obj = abstract.getObject()
+            authors = obj.getAuthors()
+            id = obj.getIdentifier()
+            for author in authors:
+                a = "%(lastname)s, %(firstnames)s" % author
+                a = a.strip()
+                if a.endswith('.'):
+                    a = a[:-1]
+                try: 
+                    value = data[a]
+                except KeyError:
+                    value = []
+                value.append(id)
+                data[a] = value
 
         result = StringIO()
         keys = data.keys()
