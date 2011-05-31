@@ -155,6 +155,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                      widget=atapi.MultiSelectionWidget(format="checkbox"),
                      ),
     atapi.StringField('identifier',
+                      searchable=True,
                       write_permission=ReviewPortalContent,
                       ),
     ## WorkflowField('submit',
