@@ -156,7 +156,7 @@ class FolderView(BrowserView):
 
         for session in sessions:
             data.append(separator + session + separator)
-            abstracts = self.catalog(portal_type='Abstract',
+            abstracts = self.catalog(portal_type=['Abstract','Speaker'],
                                      review_state=['accepted', 'published'],
                                      getSessionType=session,
                                      sort_on='getIdentifier',
