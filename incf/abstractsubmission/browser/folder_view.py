@@ -142,7 +142,15 @@ class FolderView(BrowserView):
 
         # XXX how would one get the order if sessions are just taken from the
         # catalog as well?
-        sessions = ['Demo Session', 'Poster Session 1', 'Poster Session 2']
+        sessions = ['Keynote',
+                    'Workshop 1',
+                    'Workshop 2',
+                    'Workshop 3',
+                    'Workshop 4',
+                    'Demo Session',
+                    'Poster Session 1',
+                    'Poster Session 2',
+                    ]
 
         data = []
 
