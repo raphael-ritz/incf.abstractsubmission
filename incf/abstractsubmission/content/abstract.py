@@ -350,7 +350,9 @@ class Abstract(base.ATCTContent):
         l1 = authorlist[:-1]
         return ', '.join(l1) + ' and ' + authorlist[-1]
 
-    def addAffiliationIndex(self, authors, affiliations):
+    def addAffiliationIndex(self, authors, affiliations=None):
+        if affiliations is None:
+            affiliations = [a.get('affiliation') for a in authors]
         index_map = self.getAffiliationList(affiliations, mapping = True)
         for a in authors:
             a['affiliation_index'] = index_map[a.get('affiliation')]

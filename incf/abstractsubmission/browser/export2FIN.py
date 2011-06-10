@@ -43,6 +43,7 @@ class Export(BrowserView):
 
         for abstract in abstracts:
             authors = abstract.getAuthors()
+            authors = abstract.addAffiliationIndex(authors)
             for index,author in enumerate(authors):
                 data = dict(DEFAULTS)
                 self.addEntry(data, index, author, abstract)
@@ -72,12 +73,18 @@ class Export(BrowserView):
 
     def addEntry(self, data, index, author, abstract):
 
+        author_index = str(index + 1)
+        affiliation_index = str(author.get('affiliation_index'))
+
         data['Email'] = author.get('email') or ''
         data['First Name'] = author.get('firstnames') or ''
         data['Last Name'] = author.get('lastname') or ''
         if index == 0:
             data['Correspondence Author'] = 'yes'
-        data['Author order Sequence'] = str(index + 1)
+        data['Author order Sequence'] = author_index
+        data['Affiliation order Sequence'] = affiliation_index
+        data['Author Affiliation'] = "%s*%s" % (author_index, affiliation_index)
+        data['Organization Name'] = author.get('affiliation') or ''
         data['Abstract Title'] = abstract.Title()
         data['Presentation Type'] = abstract.getPresentationFormat() or ''
         data['Topic'] = abstract.getTopic() or ''
