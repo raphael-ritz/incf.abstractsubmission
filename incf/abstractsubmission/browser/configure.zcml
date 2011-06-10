@@ -71,4 +71,12 @@
 	permission="cmf.ManagePortal"
 	/>
 
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="export2fin"
+	class="incf.abstractsubmission.browser.export2FIN.Export"
+	attribute="export2fin"
+	permission="zope2.View"
+	/>
+
 </configure>
