@@ -1,5 +1,6 @@
 from StringIO import StringIO
 from Products.Five.browser import BrowserView
+from Products.CMFCore.utils import getToolByName
 
 DEFAULTS = (
     ('Title', ''),   # academic title
@@ -32,12 +33,20 @@ KEYS = [t[0] for t in DEFAULTS]
 class Export(BrowserView):
     """Support export to Frontiers in Neuroinformatics"""
 
-    def export2fin(self, delimiter='|', newline='\r\n'):
+    def export2fin(self, delimiter='|', newline='\r\n', testing=None):
         """CSV export using a schema from FIN"""
 
-        data = dict(DEFAULTS)
         out = StringIO()
         out.write(delimiter.join(KEYS) + newline)
+
+        abstracts = self.getAbstracts(testing=testing)
+
+        for abstract in abstracts:
+            authors = abstract.getAuthors()
+            for index,author in enumerate(authors):
+                data = dict(DEFAULTS)
+                self.addEntry(data, index, author, abstract)
+                out.write(delimiter.join([data[k] for k in KEYS]) + newline)
 
         value = out.getvalue()
         out.close()
@@ -47,6 +56,32 @@ class Export(BrowserView):
 
         return value
 
-        
+
+    def getAbstracts(self, testing):
+        catalog = getToolByName(self.context, 'portal_catalog')
+        brains = catalog(portal_type='Abstract',
+                         review_state=['accepted', 'published'],
+                         )
+
+        # XXX add further logic here if we need to group, sort, or filter
+        abstracts = [b.getObject() for b in brains]
+        if testing is not None:
+            return abstracts[:5]
+        else:
+            return abstracts
+
+    def addEntry(self, data, index, author, abstract):
+
+        data['Email'] = author.get('email') or ''
+        data['First Name'] = author.get('firstnames') or ''
+        data['Last Name'] = author.get('lastname') or ''
+        if index == 0:
+            data['Correspondence Author'] = 'yes'
+        data['Author order Sequence'] = str(index + 1)
+        data['Abstract Title'] = abstract.Title()
+        data['Presentation Type'] = abstract.getPresentationFormat() or ''
+        data['Topic'] = abstract.getTopic() or ''
+
+
 
         
