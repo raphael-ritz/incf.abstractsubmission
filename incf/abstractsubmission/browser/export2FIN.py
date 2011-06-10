@@ -3,28 +3,28 @@ from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 
 DEFAULTS = (
-    ('Title', ''),   # academic title
-    ('Email', ''),
-    ('First Name', ''),
-    ('Middle Name', ''),
-    ('Last Name', ''),
-    ('Suffix', ''),
+    ('Title', '""'),   # academic title
+    ('Email', '""'),
+    ('First Name', '""'),
+    ('Middle Name', '""'),
+    ('Last Name', '""'),
+    ('Suffix', '""'),
     ('Correspondence Author', 'no'),
-    ('Author order Sequence', ''),
-    ('Affiliation order Sequence', ''),
-    ('Author Affiliation', ''),
-    ('Organization Name', ''),
-    ('Department', ''),
-    ('City', ''),
-    ('Zip/Postal Code', ''),
-    ('State/Province', ''),
-    ('Country', ''),
-    ('Abstract Title', ''),
-    ('Abstract', ''),
-    ('Presentation Type', ''),
-    ('Topic', ''),
-    ('Acknowledgements', ''),
-    ('Keywords', ''),
+    ('Author order Sequence', '""'),
+    ('Affiliation order Sequence', '""'),
+    ('Author Affiliation', '""'),
+    ('Organization Name', '""'),
+    ('Department', '""'),
+    ('City', '""'),
+    ('Zip/Postal Code', '""'),
+    ('State/Province', '""'),
+    ('Country', '""'),
+    ('Abstract Title', '""'),
+    ('Abstract', '""'),
+    ('Presentation Type', '""'),
+    ('Topic', '""'),
+    ('Acknowledgements', '""'),
+    ('Keywords', '""'),
     ('Conflict of Interest', 'no'),
     )
 
@@ -33,7 +33,7 @@ KEYS = [t[0] for t in DEFAULTS]
 class Export(BrowserView):
     """Support export to Frontiers in Neuroinformatics"""
 
-    def export2fin(self, delimiter='|', newline='\r\n', testing=None):
+    def export2fin(self, delimiter=',', newline='\r\n', testing=None):
         """CSV export using a schema from FIN"""
 
         out = StringIO()
@@ -76,18 +76,19 @@ class Export(BrowserView):
         author_index = str(index + 1)
         affiliation_index = str(author.get('affiliation_index'))
 
-        data['Email'] = author.get('email') or ''
-        data['First Name'] = author.get('firstnames') or ''
-        data['Last Name'] = author.get('lastname') or ''
+        data['Email'] = '"%s"' % author.get('email') or ''
+        data['First Name'] = '"%s"' % author.get('firstnames') or ''
+        data['Last Name'] = '"%s"' % author.get('lastname') or ''
         if index == 0:
             data['Correspondence Author'] = 'yes'
-        data['Author order Sequence'] = author_index
-        data['Affiliation order Sequence'] = affiliation_index
+        data['Author order Sequence'] = "%s" % author_index
+        data['Affiliation order Sequence'] = "%s" % affiliation_index
         data['Author Affiliation'] = "%s*%s" % (author_index, affiliation_index)
-        data['Organization Name'] = author.get('affiliation') or ''
-        data['Abstract Title'] = abstract.Title()
-        data['Presentation Type'] = abstract.getPresentationFormat() or ''
-        data['Topic'] = abstract.getTopic() or ''
+        data['Organization Name'] = '"%s"' % author.get('affiliation') or ''
+        data['Abstract Title'] = '"%s"' % abstract.Title()
+        data['Abstract'] = '"%s"' % abstract.getPlainText(escape_quote=True)
+        data['Presentation Type'] = '"%s"' % abstract.getPresentationFormat() or ''
+        data['Topic'] = '"%s"' % abstract.getTopic() or ''
 
 
 

@@ -292,7 +292,7 @@ class Abstract(base.ATCTContent):
 
     # for the abstract book
 
-    def getPlainText(self):
+    def getPlainText(self, escape_quote=False):
         """helper method for custom plain text formating"""
         text = self.getAbstract(mimetype='text/plain')
         dummy = '%$%$%'
@@ -300,6 +300,8 @@ class Abstract(base.ATCTContent):
         text = text.replace(' \r\n ', dummy)
         text = text.replace('\r\n', ' ')
         text = text.replace(dummy, ' \r\n ')
+        if escape_quote:
+            text = text.replace('"', '""')
         
         return self.normalizeWhitespace(text)
 
