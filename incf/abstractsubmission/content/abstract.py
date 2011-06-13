@@ -22,7 +22,7 @@ from Products.MasterSelectWidget.MasterSelectWidget import MasterSelectWidget
 from Products.ATExtensions import ateapi
 from Products.ATExtensions.Extensions.utils import getDisplayList
 
-from Products.WorkflowField import WorkflowField
+#from Products.WorkflowField import WorkflowField
 
 from incf.abstractsubmission.interfaces import IAbstract
 from incf.abstractsubmission.config import PROJECTNAME
