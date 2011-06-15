@@ -22,7 +22,7 @@ DEFAULTS = (
     ('Abstract Title', '""'),
     ('Abstract', '""'),
     ('Presentation Type', '""'),
-    ('Topic', '""'),
+    ('Topic', '"4th INCF Congress on Neuroinformatics"'),
     ('Acknowledgements', '""'),
     ('Keywords', '""'),
     ('Conflict of Interest', 'no'),
@@ -88,7 +88,7 @@ class Export(BrowserView):
         data['Abstract Title'] = '"%s"' % abstract.Title()
         data['Abstract'] = '"%s"' % abstract.getPlainText(escape_quote=True)
         data['Presentation Type'] = '"%s"' % abstract.getPresentationFormat() or ''
-        data['Topic'] = '"%s"' % abstract.getTopic() or ''
+        data['Keywords'] = '"Neuroinformatics, %s"' % abstract.getTopic() or ''
 
 
 
