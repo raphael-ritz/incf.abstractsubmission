@@ -1,3 +1,4 @@
+import urllib
 from StringIO import StringIO
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
@@ -30,6 +31,16 @@ DEFAULTS = (
 
 KEYS = [t[0] for t in DEFAULTS]
 
+TRANSLATIONS = {
+    'United Kingdom of Great Britain & Northern Ireland': 'UK',
+    'United States of America': 'USA',
+    }
+
+def getAdditionalInfo():
+    """Extract city and country info from people directory at incf.org"""
+    data = urllib.urlopen("http://incf.org/community/people/dumpCityandCountry").read()
+    return eval(data)
+
 class Export(BrowserView):
     """Support export to Frontiers in Neuroinformatics"""
 
@@ -40,13 +51,14 @@ class Export(BrowserView):
         out.write(delimiter.join(KEYS) + newline)
 
         abstracts = self.getAbstracts(testing=testing)
+        additional_data = getAdditionalInfo()
 
         for abstract in abstracts:
             authors = abstract.getAuthors()
             authors = abstract.addAffiliationIndex(authors)
             for index,author in enumerate(authors):
                 data = dict(DEFAULTS)
-                self.addEntry(data, index, author, abstract)
+                self.addEntry(data, index, author, abstract, additional_data)
                 out.write(delimiter.join([data[k] for k in KEYS]) + newline)
 
         value = out.getvalue()
@@ -67,11 +79,11 @@ class Export(BrowserView):
         # XXX add further logic here if we need to group, sort, or filter
         abstracts = [b.getObject() for b in brains]
         if testing is not None:
-            return abstracts[:5]
+            return abstracts[:10]
         else:
             return abstracts
 
-    def addEntry(self, data, index, author, abstract):
+    def addEntry(self, data, index, author, abstract, additional_data):
 
         author_index = str(index + 1)
         affiliation_index = str(author.get('affiliation_index'))
@@ -81,6 +93,12 @@ class Export(BrowserView):
         data['Last Name'] = '"%s"' % author.get('lastname') or ''
         if index == 0:
             data['Correspondence Author'] = 'yes'
+            creator = abstract.Creator()
+            city, country = additional_data.get(creator, [None, None])
+            if city:
+                data['City'] = '"%s"' % city
+            if country:
+                data['Country'] = '"%s"' % TRANSLATIONS.get(country, country)
         data['Author order Sequence'] = "%s" % author_index
         data['Affiliation order Sequence'] = "%s" % affiliation_index
         data['Author Affiliation'] = "%s*%s" % (author_index, affiliation_index)

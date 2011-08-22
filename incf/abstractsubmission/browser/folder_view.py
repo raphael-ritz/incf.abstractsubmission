@@ -104,7 +104,7 @@ class FolderView(BrowserView):
 
     # support the various indexes
 
-    def authorIndex(self):
+    def authorIndex(self, rft=None):
         """Author followed by comma separated list of abstract ids;
         one per line sorted on last name"""
 
@@ -132,7 +132,10 @@ class FolderView(BrowserView):
         keys = data.keys()
         keys.sort()
         for k in keys:
-            result.write('%s\t%s\r\n' % (k, ', '.join(data[k])))
+            if rft is None:
+                result.write('%s\t%s\r\n' % (k, ', '.join(data[k])))
+            else:
+                result.write('%s**(rft)**%s\r\n' % (k, ', '.join(data[k])))
         value = result.getvalue()
         result.close()
         return value
