@@ -132,10 +132,12 @@ class FolderView(BrowserView):
         keys = data.keys()
         keys.sort()
         for k in keys:
+            ids = data[k]
+            ids.sort()
             if rft is None:
-                result.write('%s\t%s\r\n' % (k, ', '.join(data[k].sort())))
+                result.write('%s\t%s\r\n' % (k, ', '.join(ids)))
             else:
-                result.write('%s**(rft)**%s\r\n' % (k, ', '.join(data[k].sort())))
+                result.write('%s**(rft)**%s\r\n' % (k, ', '.join(ids)))
         value = result.getvalue()
         result.close()
         return value
