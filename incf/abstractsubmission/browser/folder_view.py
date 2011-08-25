@@ -79,6 +79,34 @@ class FolderView(BrowserView):
             return "(No notification send)"
         return "(notified: %s)" % notified
 
+    def abstractsWithImages(self, url = None):
+        """List of identifiers for all contributions that have an
+        image included and that are accepted or published
+
+        Sorted on Identifier
+
+        If 'url' is not None the absolute URL to the abstract will
+        be included
+        """
+        result = []
+        brains = self.catalog(portal_type='Abstract',
+                              review_state=['accepted', 'published'],
+                              sort_on='getIdentifier',
+                              )
+        for brain in brains:
+            obj = brain.getObject()
+            if not obj.hasImage():
+                continue
+            if url is not None:
+                s = "%s %s" % (obj.getIdentifier(), obj.absolute_url())
+            else:
+                s = obj.getIdentifier()
+
+            result.append(s)
+            
+        return '\n\r'.join(result)
+        
+
         
     # plain text export for the abstract book
     
