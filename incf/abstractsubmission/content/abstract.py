@@ -277,6 +277,13 @@ class Abstract(base.ATCTContent):
         """Number of characters of abstract"""
         return len(self.getAbstract(mimetype="text/plain").strip())
 
+    def hasImage(self):
+        """True if an image has been uploaded, False otherwise"""
+        img = self.getField('image').getRaw(self)
+        if img == '':    # yes, '' is the default value of an image field
+             return False
+        return True
+
     def tag(self, **kwargs):
         """Generate image tag using the api of the ImageField
         """
