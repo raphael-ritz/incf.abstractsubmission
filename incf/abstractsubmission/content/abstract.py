@@ -11,6 +11,7 @@ from StringIO import StringIO
 
 from zope.interface import implements
 from DateTime import DateTime
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import ReviewPortalContent
 
 from Products.Archetypes import atapi
@@ -125,6 +126,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                                 ),
                       ),
     atapi.TextField('whyDemo',
+                    view_permission=ModifyPortalContent,
                     widget=atapi.TextAreaWidget(label="Why Demo?",
                                                 description="If you have chosen 'Demo' "\
                                                 "above: Please give a "\
