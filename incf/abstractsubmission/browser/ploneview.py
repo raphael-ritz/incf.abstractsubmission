@@ -6,7 +6,7 @@ from Products.CMFPlone.browser.ploneview import Plone
 from zope.component.interfaces import ComponentLookupError
 
 class IncfPlone(Plone):
-    """ Override to manipulate the 'editable order'
+    """ Override to manipulate the 'editable border'
     """
 
     def showEditableBorder(self):
@@ -15,6 +15,7 @@ class IncfPlone(Plone):
         """
 
         exceptions = ['abstracts',
+                      'proposals',
                       ]
 
         exception = False
