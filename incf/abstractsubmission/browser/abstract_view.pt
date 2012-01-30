@@ -38,9 +38,9 @@
             This item does not have any body text, click the edit tab to change it.
         </p>
 
-        <metal:field use-macro="python:here.widget('abstract', mode='view')">
-        Body text
-        </metal:field>
+        <div tal:condition="python: text"
+             tal:content="structure text">
+        </div>	 
 
 	<div tal:condition="context/getImage"
 	     tal:define="scale context/getImageSize">
