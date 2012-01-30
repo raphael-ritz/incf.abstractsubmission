@@ -68,19 +68,13 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     primary=1,
                     required=1,
                     default_output_type='text/x-html-safe',
-                    allowable_content_types=('text/html',),
-                    widget=atapi.RichWidget(
+                    allowable_content_types=('text/x-web-intelligent',),
+                    widget=atapi.TextAreaWidget(
                         rows=20,
                         description="We ask you to keep the abstract length "\
-                        "to around one page (A4 or US letter) or less, including image. ",
-                        filter_buttons=(
-                            'bg-indent',
-                            'imagelibdrawer-button',
-                            'linklibdrawer-button',
-                            'anchors-button',
-                            'manage-anchors-tab',
-                            ),
-    ),
+                        "to around one page (A4 or US letter) or less. ",
+                        maxlength=1000,  # XXX: what's a proper max length here???
+                        ),
                     ),
     atapi.ImageField('image',
                      sizes={'thumb':(80,80),
