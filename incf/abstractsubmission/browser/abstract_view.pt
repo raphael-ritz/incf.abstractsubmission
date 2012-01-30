@@ -38,7 +38,8 @@
             This item does not have any body text, click the edit tab to change it.
         </p>
 
-        <div tal:condition="python: text"
+        <div class="abstract-body"
+	     tal:condition="python: text"
              tal:content="structure text">
         </div>	 
 
