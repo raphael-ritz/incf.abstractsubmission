@@ -2,7 +2,7 @@
 <object name="SubmissionFolder"
    meta_type="Factory-based Type Information with dynamic views"
    i18n:domain="incf.abstractsubmission" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
-  <property name="title" i18n:translate="">SubmissionFolder</property>
+  <property name="title" i18n:translate="">Abstract Submission Folder</property>
   <property name="description"
     i18n:translate="">Section for Abstract submissions</property>
   <property name="content_meta_type">SubmissionFolder</property>
