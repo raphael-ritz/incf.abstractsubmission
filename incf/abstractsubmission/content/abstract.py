@@ -9,6 +9,8 @@ except ImportError:  # python <= 2.4
 from urllib import urlopen
 from StringIO import StringIO
 
+from PIL import Image
+
 from zope.interface import implements
 from DateTime import DateTime
 from Products.CMFCore.permissions import ModifyPortalContent
@@ -28,10 +30,14 @@ from Products.ATExtensions.Extensions.utils import getDisplayList
 from incf.abstractsubmission.interfaces import IAbstract
 from incf.abstractsubmission.config import PROJECTNAME
 
+MINIMUM_IMAGE_SIZE = 600  # number of pixel of shorter image dimension
+SUPPORTED_IMAGE_FORMATS = ('jpg', 'jpeg', 'png', 'gif')
+
+
 AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('intro',
                         comment= "Submitted abstracts can be modified until "\
-                        "the deadline - April 27, 2012. ",
+                        "the deadline - April 20, 2012. ",
                         ),
     ateapi.RecordsField('authors',
                         searchable=1,
@@ -71,9 +77,12 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     allowable_content_types=('text/x-web-intelligent',),
                     widget=atapi.TextAreaWidget(
                         rows=20,
-                        description="We ask you to keep the abstract length "\
-                        "to around one page (A4 or US letter) or less. ",
-                        maxlength=1000,  # XXX: what's a proper max length here???
+                        description="Text length is restricted to 2500 characters maximum. "\
+                        "References should include DOIs if possible. "\
+                        "Text will be rendered as entered preserving whitespace "\
+                        "and embedded links will be clickable. Mathematical expressions "\
+                        "are not supported. Put them in the image if needed.",
+                        maxlength=2500,  # XXX: what's a proper max length here???
                         ),
                     ),
     atapi.ImageField('image',
@@ -163,7 +172,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('closing',
                         comment= \
                         "Submitted abstracts can be modified until the "\
-                        "deadline - April 27, 2012."),
+                        "deadline - April 20, 2012."),
 ))
 
 # Set storage on fields copied from ATContentTypeSchema, making sure
@@ -178,7 +187,8 @@ AbstractSchema['authors'].widget.description = "Please add "\
 AbstractSchema['image'].widget.description = "You have the option to include "\
                                              "one image with your abstract. This image "\
                                              "should be in one of the formats GIF, JPG, "\
-                                             "or PNG and cannot be bigger than 5MB. In the "\
+                                             "or PNG and should be at least XXX pixels wide "\
+                                             "but cannot be bigger than 5MB. In the "\
                                              "final display the image will be scaled "\
                                              "to the size chosen below."
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
@@ -396,5 +406,23 @@ class Abstract(base.ATCTContent):
                                                  self.getImageCaption()))
 
         return separator.join(lines)
+
+    # helper message for sanity checking of the image
+    def checkImageFormat(self, request):
+        """Called from 'validate_integrity'. Return a warning phrase if the
+        image seems fishy"""
+
+        image_upload = request.form.get('image_file', None) 
+        if image_upload is not None:
+            image_upload.seek(0)
+            image = Image.open(image_upload)
+            if image.format.lower() not in SUPPORTED_IMAGE_FORMATS:
+                return "Image format '%s' is not supported. Please consider uploading "\
+                    "a JPG, GIF or PNG file." % image.format
+            if min(image.size) < MINIMUM_IMAGE_SIZE:
+                return "The image size of %sx%s is considered too small. "\
+                    "Please consider uploading a larger or higher resolution image" % (image.size[0], image.size[1])
+
+        return None  # everything OK
 
 atapi.registerType(Abstract, PROJECTNAME)
