@@ -20,12 +20,8 @@ from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base
 from Products.ATContentTypes.content import schemata
 
-from Products.MasterSelectWidget.MasterSelectWidget import MasterSelectWidget
-
 from Products.ATExtensions import ateapi
 from Products.ATExtensions.Extensions.utils import getDisplayList
-
-#from Products.WorkflowField import WorkflowField
 
 from incf.abstractsubmission.interfaces import IAbstract
 from incf.abstractsubmission.config import PROJECTNAME
@@ -55,10 +51,10 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                             'affiliation',
                                             'country',
                                             ),
-                        subfield_sizes={'firstnames': 15,
-                                        'lastname': 20,
-                                        'email': 20,
-                                        'affiliation': 40,
+                        subfield_sizes={'firstnames': 10,
+                                        'lastname': 15,
+                                        'email': 15,
+                                        'affiliation': 30,
                                         },
                         subfield_maxlength={'firstnames':120,
                                             'lastname':120,
@@ -82,7 +78,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         "Text will be rendered as entered preserving whitespace "\
                         "and embedded links will be clickable. Mathematical expressions "\
                         "are not supported. Put them in the image if needed.",
-                        maxlength=2500,  # XXX: what's a proper max length here???
+                        maxlength=2500,  
                         ),
                     ),
     atapi.ImageField('image',
@@ -101,60 +97,43 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                                     ('default', 'Default (400px)'),
                                                     ('large', 'Large (750px)')
                                                     )),
-                      default='default',
+                      default='large',
                       widget=atapi.SelectionWidget(label="Image Size",
                                                    format='radio',
+                                                   visible={'view': 'invisible', 'edit': 'invisible'},
                                                    description='The image will be scaled such '\
-                                                   'that its dimensions are no largeer than the selection. '\
+                                                   'that its dimensions are not larger than the selection. '\
                                                    'The aspect ratio will be preserved.',
                                                    ),
                       ),
-#    atapi.ComputedField('size',
-#                        expression="object/getTextSize",
-#                        ),
     atapi.StringField('presentationFormat',
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
                                                     ('Demo', 'Demo'))),
                       default='Poster',
-                      widget=MasterSelectWidget(label="Preferred "\
-                                                "Presentation Format",
-                                                description='The default presentation format '\
-                                                'is "Poster". If you wish to submit an abstract '\
-                                                'for a demonstration, please select the "Demo" '\
-                                                'option here.',
-                                                # as long as we use a MasterSelectWidget we cannot use 'radio'
-                                                format="radio",
-                                                slave_fields=({'name':'whyDemo',
-                                                               'action': 'show',
-                                                               'hide_values': ('Demo',),
-                                                               },
-                                                              ),
-                                                ),
+                      widget=atapi.SelectionWidget(label="Preferred "\
+                                                   "Presentation Format",
+                                                   description='The default presentation format '\
+                                                   'is "Poster". If you wish to submit an abstract '\
+                                                   'for a demonstration, please select the "Demo" '\
+                                                   'option here.',
+                                                   format="radio",
+                                             ),
                       ),
-    atapi.TextField('whyDemo',
-                    view_permission=ModifyPortalContent,
-                    widget=atapi.TextAreaWidget(label="Why Demo?",
-                                                description="If you have chosen 'Demo' "\
-                                                "above: Please give a "\
-                                                "brief explanation of "\
+    atapi.StringField('whyDemo',
+                        view_permission=ModifyPortalContent,
+                        widget=atapi.TextAreaWidget(label="Why Demo?",
+                                                    description="If you have chosen 'Demo' "\
+                                                    "above: Please give a "\
+                                                    "brief explanation of "\
                     "why your contribution would benefit from being demonstrated "\
                     "live rather than by a regular poster presentation.",
-                                                ),
+                    ),
                     ),
     atapi.StringField('topic',
                       vocabulary='getTopics',
                       required=1,
                       widget=atapi.SelectionWidget(format="radio"),
                       ),
-    atapi.BooleanField('travelAward',
-                       widget=atapi.BooleanWidget(label='Travel Award',
-                                                  description='Check box if you would '\
-                                                  'like to be considered for the '\
-                                                  'student/post-doctoral travel award. '\
-                                                  '(<a href="/about/travel-awards" target="_blank">'\
-                                                  'Information on eligibility and requirements</a>)',
-                                                  ),
-                       ),
     atapi.LinesField('sessionType',
                      multivalued=True,
                      vocabulary='getSessionTypes',
@@ -166,9 +145,6 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       searchable=True,
                       write_permission=ReviewPortalContent,
                       ),
-    ## WorkflowField('submit',
-    ##               write_permissiom=ReviewPortalContent,
-    ##               ),
     ateapi.CommentField('closing',
                         comment= \
                         "Submitted abstracts can be modified until the "\
@@ -187,15 +163,10 @@ AbstractSchema['authors'].widget.description = "Please add "\
 AbstractSchema['image'].widget.description = "You have the option to include "\
                                              "one image with your abstract. This image "\
                                              "should be in one of the formats GIF, JPG, "\
-                                             "or PNG and should be at least XXX pixels wide "\
-                                             "but cannot be bigger than 5MB. In the "\
-                                             "final display the image will be scaled "\
-                                             "to the size chosen below."
+                                             "or PNG and should be at least 700 pixels wide. "\
+                                             "It should not be larger than 5MB. "
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
-## AbstractSchema['submit'].widget.label="Reviewers"
-## AbstractSchema['submit'].widget.description = "How did you decide to treat this abstract? "\
-##                                               "You need to press 'submit' below for this to take effect."
 
 schemata.finalizeATCTSchema(AbstractSchema, moveDiscussion=False)
 AbstractSchema.moveField('title', after="intro")
@@ -420,8 +391,9 @@ class Abstract(base.ATCTContent):
                 return "Image format '%s' is not supported. Please consider uploading "\
                     "a JPG, GIF or PNG file." % image.format
             if min(image.size) < MINIMUM_IMAGE_SIZE:
-                return "The image size of %sx%s is considered too small. "\
-                    "Please consider uploading a larger or higher resolution image" % (image.size[0], image.size[1])
+                return "The image size of %sx%s might be too small. "\
+                    "Please double-check and consider uploading a larger "\
+                    "or higher resolution image in that case." % (image.size[0], image.size[1])
 
         return None  # everything OK
 
