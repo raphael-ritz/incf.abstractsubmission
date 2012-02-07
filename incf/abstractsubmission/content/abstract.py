@@ -391,9 +391,9 @@ class Abstract(base.ATCTContent):
                 return "Image format '%s' is not supported. Please consider uploading "\
                     "a JPG, GIF or PNG file." % image.format
             if min(image.size) < MINIMUM_IMAGE_SIZE:
-                return "The image size of %sx%s might be too small. "\
+                return "The image size of %sx%s will be too small for the printed abstract book. "\
                     "Please double-check and consider uploading a larger "\
-                    "or higher resolution image in that case." % (image.size[0], image.size[1])
+                    "or higher resolution image." % (image.size[0], image.size[1])
 
         return None  # everything OK
 
