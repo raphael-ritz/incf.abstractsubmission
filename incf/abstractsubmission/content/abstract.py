@@ -73,7 +73,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     allowable_content_types=('text/x-web-intelligent',),
                     widget=atapi.TextAreaWidget(
                         rows=20,
-                        description="Text length is restricted to 2500 characters maximum. "\
+                        description="Plain text only. Text length is restricted to 2500 characters maximum. "\
                         "References should include DOIs if possible. "\
                         "Text will be rendered as entered preserving whitespace "\
                         "and embedded links will be clickable. Mathematical expressions "\
