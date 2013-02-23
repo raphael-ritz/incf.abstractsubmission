@@ -158,19 +158,7 @@ class SubmissionFolder(folder.ATBTreeFolder):
             average = float(rated.averageRating)
             number = rated.numberOfRatings
             rating = "%2.2f (%s)" % (average, number)
-            # handle comments
-            reply_count = abstract.portal_discussion.getDiscussionFor(abstract).replyCount(abstract)
-            replies = abstract.portal_discussion.getDiscussionFor(abstract).getReplies()
-            if not replies:
-                comments = 'None'
-            else:
-                comments = []
-                for r in replies:
-                    comments.append("%s (%s): %s - %s" % (r.Creator(),
-                                                          r.created().Date(),
-                                                          r.Title(),
-                                                          r.CookedBody()))
-                comments = " -- ".join(comments)
+            reply_count, comments = comment_data(abstract)
             values = [abstract.getAuthors()[0].get('firstnames') or '',
                       abstract.getAuthors()[0].get('lastname') or '',
                       abstract.getAuthors()[0].get('email') or '',
@@ -179,7 +167,7 @@ class SubmissionFolder(folder.ATBTreeFolder):
                       abstract.Title() or '',
                       abstract.getPresentationFormat() or '',
                       abstract.getTopic() or '',
-                      str(abstract.getTravelAward() or False),
+                      #str(abstract.getTravelAward() or False),
                       ', '.join(abstract.getSessionType()),
                       abstract.absolute_url(),
                       rating,
@@ -246,5 +234,40 @@ class SubmissionFolder(folder.ATBTreeFolder):
         value = out.getvalue()
         out.close()
         return value
+
+def comment_data(abstract):
+    """Helper function returning the number and concatenated text
+    of comments made on 'abstract'"""
+    # try old API first
+    try:
+        reply_count = abstract.portal_discussion.getDiscussionFor(abstract).replyCount(abstract)
+        replies = abstract.portal_discussion.getDiscussionFor(abstract).getReplies()
+        if not replies:
+            return 0, 'None'
+        comments = []
+        for r in replies:
+            comments.append("%s (%s): %s - %s" % (r.Creator(),
+                                                   r.created().Date(),
+                                                   r.Title(),
+                                                   r.CookedBody()))
+        comments = " -- ".join(comments)
+        return reply_count, comments
+    except AttributeError:
+        # usually happens if plone.app.discussion is used
+        # then the following should work
+        from plone.app.discussion.interfaces import IConversation
+        conversation = IConversation(abstract)
+        reply_count = len(conversation.objectIds())
+        if not reply_count:
+            return 0, 'None'        
+        replies = [conversation[id] for id in conversation.objectIds()]
+        comments = []
+        for r in replies:
+            comments.append("%s (%s): %s" % (r.author_name,
+                                              r.modification_date.strftime('%Y-%m-%d %H:%M'),
+                                              r.text))
+        comments = " -- ".join(comments)
+        return reply_count, comments.encode('utf-8')            
+
 
 atapi.registerType(SubmissionFolder, PROJECTNAME)
