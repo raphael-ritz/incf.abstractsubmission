@@ -32,6 +32,7 @@ SUPPORTED_IMAGE_FORMATS = ('jpg', 'jpeg', 'png', 'gif')
 
 AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('intro',
+                        comment_method="introComment",
                         comment= "Submitted abstracts can be modified until "\
                         "the deadline - April 20, 2012. ",
                         ),
@@ -146,6 +147,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       write_permission=ReviewPortalContent,
                       ),
     ateapi.CommentField('closing',
+                        comment_method = 'closingComment',
                         comment= \
                         "Submitted abstracts can be modified until the "\
                         "deadline - April 20, 2012."),
@@ -198,6 +200,14 @@ class Abstract(base.ATCTContent):
     def Subject(self):
         """Override subject to return topic"""
         return [self.getTopic()]
+
+    def introComment(self):
+        """To be shown on top of the edit form"""
+        return self.aq_parent.getIntroductoryComment()
+
+    def closingComment(self):
+        """To be shown at the end of the edit form"""
+        return self.aq_parent.getClosingComment()
 
     def formatAuthors(self, separator = ", "):
         

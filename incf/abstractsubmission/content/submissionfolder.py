@@ -62,6 +62,22 @@ SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
                      "session types to be offered for the presenations here. "\
                      "One term per line."),
                      ),
+    atapi.StringField('introductoryComment',
+                       default="Abstracts can be updated until the deadline.",
+                       widget=atapi.TextAreaWidget(
+                           label="Introductory Comment",
+                           description="Shown on top of the abstract's edit "\
+                           "form (format: structured text).",
+                           rows=3),
+                     ),
+    atapi.StringField('closingComment',
+                       default="Abstracts can be updated until the deadline.",
+                       widget=atapi.TextAreaWidget(
+                           label="Closing Comment",
+                           description="Shown at the end of the abstract's "\
+                           "edit form (format: structured text).",
+                           rows=3),
+                     ),
 ))
 
 # Set storage on fields copied from ATFolderSchema, making sure
