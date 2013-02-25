@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
 <metadata>
+  <description>Default installation profile for incf.abstractsubmission</description>
   <version>1000</version>
+  <dependencies>
+    <dependency>profile-Products.ATExtensions:default</dependency>
+    <dependency>profile-plone.contentratings:default</dependency>
+  </dependencies>
 </metadata>
