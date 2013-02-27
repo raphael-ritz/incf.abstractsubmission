@@ -54,7 +54,8 @@ SubmissionFolderSchema = folder.ATBTreeFolderSchema.copy() + atapi.Schema((
                      default_method="getDefaultTopics",
                      widget=atapi.LinesWidget(description="Define the terms "\
                      "to be offered for the abstract classification here. "\
-                     "One term per line."),
+                     "One term per line. Leave empty to not offer topical "\
+                     "categorization."),
                      ),
     atapi.LinesField('sessionTypes',
                      default_method="getDefaultSessionTypes",

@@ -173,17 +173,7 @@ class FolderView(BrowserView):
     def sessionIndex(self, separator='\r\n'):
         """Contributions groups by session and sorted by id within"""
 
-        # XXX how would one get the order if sessions are just taken from the
-        # catalog as well?
-        sessions = ['Keynote',
-                    'Workshop 1',
-                    'Workshop 2',
-                    'Workshop 3',
-                    'Workshop 4',
-                    'Demo Session',
-                    'Poster Session 1',
-                    'Poster Session 2',
-                    ]
+        sessions = self.context.getSessionTypes()
 
         data = []
 
