@@ -43,9 +43,9 @@
           <metal:field use-macro="python:here.widget('introductionOpenAnonymous', mode='view')">
             Body text
           </metal:field>
-	  <h3>You need an INCF Account to submit an Abstract.</h3>
+	  <h3>You need an account on this site to submit an Abstract.</h3>
 	  <p>
-	  If you already have an INCF Account, please log in
+	  If you already have an account, please log in
 	  </p>
 	  <div class="formControls">
 		  <form id="login"
@@ -57,18 +57,22 @@
 			   name="login">
 		  </form>
 	    <p>
-	    <a href="http://www.incf.org/mail_password_form"
-	       alt="Mail password form" class="link-plain" target="_blank">
+	    <a href="mail_password_form"
+	       alt="Mail password form"
+	       class="link-plain"
+               target="_blank"
+	       tal:attributes="href string:$portal_url/mail_password_form">
 	    Forgot your password?</a>
 	    </p>
 	    <p>&nbsp;</p>
 	    <p>
-	    Not already an INCF member? Please sign up before starting
+	    Not a site member? Please sign up before starting
 	    the submission process
 	    </p>
 		  <form id="register"
-			action="http://www.incf.org/join_form"
-			method="post">
+			action="join_form"
+			method="post"
+	                tal:attributes="action string:$portal_url/@@register">
 		    <input class="context"
 			   type="submit"
 			   value="Sign up"
@@ -97,20 +101,6 @@
 		     name="type_name"
 		     value="Abstract">
 	      </form>
-	    <h3>Make sure your INCF Profile is up-to-date!</h3>
-	    <p>
-	    The Abstract Submission form will be pre-populated with
-	    member data such as name, email and affiliation.
-	    </p>
-	    <form id="view_profile"
-	        action="http://www.incf.org/community/people/"
-	        method="post"
-	        tal:attributes="action view/profileUrl">
-	      <input class="context"
-	          type="submit"
-	          value="View my INCF user profile"
-	          name="view_profile">
-	    </form>
 	  </div>
 	</div>
 
