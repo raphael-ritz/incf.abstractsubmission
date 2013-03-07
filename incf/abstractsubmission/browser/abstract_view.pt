@@ -40,8 +40,27 @@
 
         <div class="abstract-body"
 	     tal:condition="python: text"
-             tal:content="structure text">
-        </div>	 
+            tal:content="structure text">
+       </div>
+       
+	<div tal:condition="context/getAcknowledgments">
+	  <br />
+	  <b>Acknowledgments</b><br />
+          <metal:field
+	     use-macro="python:here.widget('acknowledgments',
+	     mode='view')">
+             Acknowledgments
+          </metal:field>
+	</div>
+       
+	<div tal:condition="context/getCitations">
+	  <br />
+	  <b>References</b><br />
+	   <div class="abstract-body"
+	    tal:content="structure context/getCitations">
+            References
+          </div>
+	</div>
 
 	<div tal:condition="context/getImage"
 	     tal:define="scale context/getImageSize">
@@ -54,6 +73,7 @@
         </metal:field>
 
 	<div class="abstractHandling">
+	  <br />
 	<div>
 	  <b>Preferred presentation format</b>:
           <metal:field use-macro="python:here.widget('presentationFormat', mode='view')">
