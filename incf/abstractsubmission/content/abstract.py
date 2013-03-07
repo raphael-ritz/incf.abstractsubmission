@@ -79,7 +79,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         "Text will be rendered as entered preserving whitespace "\
                         "and embedded links will be clickable. Mathematical expressions "\
                         "are not supported. Put them in the image if needed.",
-                        maxlength=2500,  
+                        maxlength=2000,  
                         ),
                     ),
     atapi.ImageField('image',
