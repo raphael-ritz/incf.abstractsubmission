@@ -74,23 +74,23 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     allowable_content_types=('text/x-web-intelligent',),
                     widget=atapi.TextAreaWidget(
                         rows=20,
-                        description="Plain text only. Text length is restricted to 2500 characters maximum. "\
+                        description="Plain text only. Text length is restricted to 1500 characters maximum. "\
                         "References should include DOIs if possible. "\
                         "Text will be rendered as entered preserving whitespace "\
                         "and embedded links will be clickable. Mathematical expressions "\
                         "are not supported. Put them in the image if needed.",
-                        maxlength=2000,  
+                        maxlength=1500,  
                         ),
                     ),
     atapi.StringField('acknowledgments',
                       widget=atapi.TextAreaWidget(label="Acknowledgments",
-                                                  rows=5),
+                                                  rows=5,maxlength=500),
                       ),
     atapi.TextField('citations',
                     default_output_type='text/x-html-safe',
                     allowable_content_types=('text/x-web-intelligent',),                      
                     widget=atapi.TextAreaWidget(label="References",
-                                                rows=10),
+                                                rows=10,maxlength=500),
                     ),         
     atapi.ImageField('image',
                      sizes={'thumb':(80,80),
