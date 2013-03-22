@@ -4,7 +4,7 @@
     i18n_domain="incf.abstractsubmission">
 
   <include package="plone.app.contentmenu" />
-
+  <include package="Products.CMFCore" file="permissions.zcml" />
   <!-- -*- extra stuff goes here -*- -->
 
   
