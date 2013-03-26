@@ -65,7 +65,7 @@ class Export(BrowserView):
         out.close()
         self.request.RESPONSE.setHeader('Content-Type', 'application/x-msexcel')
         self.request.RESPONSE.setHeader("Content-Disposition", 
-                                        "inline;filename=INCF2011abstracts.csv")
+                                        "inline;filename=abstracts_full.csv")
 
         return value
 

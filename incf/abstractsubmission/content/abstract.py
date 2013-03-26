@@ -34,7 +34,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ateapi.CommentField('intro',
                         comment_method="introComment",
                         comment= "Submitted abstracts can be modified until "\
-                        "the deadline - April 20, 2012. ",
+                        "the deadline. ",
                         ),
     ateapi.RecordsField('authors',
                         searchable=1,
@@ -60,7 +60,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         subfield_maxlength={'firstnames':120,
                                             'lastname':120,
                                             'email':120,
-                                            'affiliation':120,
+                                            'affiliation':200,
                                             },
                         subfield_vocabularies={'country':'CountryNames'},
                         minimalSize=5,
@@ -74,17 +74,17 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     allowable_content_types=('text/x-web-intelligent',),
                     widget=atapi.TextAreaWidget(
                         rows=20,
-                        description="Plain text only. Text length is restricted to 1500 characters maximum. "\
+                        description="Plain text only. Text length is restricted to 2000 characters maximum. "\
                         "References should include DOIs if possible. "\
                         "Text will be rendered as entered preserving whitespace "\
                         "and embedded links will be clickable. Mathematical expressions "\
                         "are not supported. Put them in the image if needed.",
-                        maxlength=1500,  
+                        maxlength=2000,  
                         ),
                     ),
     atapi.StringField('acknowledgments',
                       widget=atapi.TextAreaWidget(label="Acknowledgments",
-                                                  rows=5,maxlength=500),
+                                                  rows=5,maxlength=300),
                       ),
     atapi.TextField('citations',
                     default_output_type='text/x-html-safe',
@@ -119,25 +119,24 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                       ),
     atapi.StringField('presentationFormat',
                       vocabulary=atapi.DisplayList((('Poster', 'Poster'),
-                                                    ('Demo', 'Demo'))),
+                                                    ('Demo', 'Talk or Poster'))),
                       default='Poster',
                       widget=atapi.SelectionWidget(label="Preferred "\
                                                    "Presentation Format",
                                                    description='The default presentation format '\
-                                                   'is "Poster". If you wish to submit an abstract '\
-                                                   'for a demonstration, please select the "Demo" '\
-                                                   'option here.',
+                                                   'is "Poster". If you want your abstract to be '\
+                                                   'considered for an oral presentation, please '\
+                                                   'select the "Talk or Poster" option.',
                                                    format="radio",
                                              ),
                       ),
     atapi.StringField('whyDemo',
                         view_permission=ModifyPortalContent,
-                        widget=atapi.TextAreaWidget(label="Why Demo?",
-                                                    description="If you have chosen 'Demo' "\
+                        widget=atapi.TextAreaWidget(label="Why Talk?",
+                                                    description="If you have chosen 'Talk' "\
                                                     "above: Please give a "\
                                                     "brief explanation of "\
-                    "why your contribution would benefit from being demonstrated "\
-                    "live rather than by a regular poster presentation.",
+                    "why your contribution should be selected for an oral presentation.",
                     ),
                     ),
     atapi.StringField('topic',
@@ -162,7 +161,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                         comment_method = 'closingComment',
                         comment= \
                         "Submitted abstracts can be modified until the "\
-                        "deadline - April 20, 2012."),
+                        "deadline."),
 ))
 
 # Set storage on fields copied from ATContentTypeSchema, making sure
@@ -177,8 +176,8 @@ AbstractSchema['authors'].widget.description = "Please add "\
 AbstractSchema['image'].widget.description = "You have the option to include "\
                                              "one image with your abstract. This image "\
                                              "should be in one of the formats GIF, JPG, "\
-                                             "or PNG and should be at least 700 pixels wide. "\
-                                             "It should not be larger than 5MB. "
+                                             "or PNG and should be at least 700 pixels wide "\
+                                             "and no larger than 5MB. "
 AbstractSchema['identifier'].widget.description = "Identifier to be "\
     "used in the program and abstract booklet."
 
@@ -255,6 +254,12 @@ class Abstract(base.ATCTContent):
 
     def defaultAuthor(self):
         """Return data of current user as default for first author"""
+
+        return [{'firstnames': '(your first names)',
+                 'lastname': '(your last name)',
+                 'email': 'you@somewhere.com',
+                 'affiliation': 'Some Great Place',
+                 },]
 
         member = self.portal_membership.getAuthenticatedMember()
         memberId = member.getId()

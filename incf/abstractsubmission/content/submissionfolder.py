@@ -196,7 +196,7 @@ class SubmissionFolder(folder.ATBTreeFolder):
         out.close()
         self.REQUEST.RESPONSE.setHeader('Content-Type', 'application/x-msexcel')
         self.REQUEST.RESPONSE.setHeader("Content-Disposition", 
-                                        "inline;filename=congress2011abstracts.csv")
+                                        "inline;filename=abstracts_overview.csv")
 
         return value
 

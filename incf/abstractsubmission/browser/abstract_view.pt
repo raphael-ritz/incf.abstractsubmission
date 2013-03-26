@@ -81,17 +81,19 @@
           </metal:field>
 	</div>
 	<div tal:condition="here/getWhyDemo">
-	  <b>Why demo</b>:
+	  <b>Why talk</b>:
           <metal:field use-macro="python:here.widget('whyDemo', mode='view')">
             Body text
           </metal:field>
 	</div>
+<!--
 	<div>
 	  <b>Topic</b>:
           <metal:field use-macro="python:here.widget('topic', mode='view')">
             Body text
           </metal:field>
 	</div>
+-->
 	<div tal:condition="python:here.portal_workflow.getInfoFor(here,'review_state')=='accepted' or False">
 	  <b>Session</b>:
           <metal:field use-macro="python:here.widget('sessionType', mode='view')">
@@ -119,22 +121,6 @@
             show related items if they exist
         </div>
     
-        <div tal:replace="structure provider:plone.belowcontentbody" />
-	</div>
-	<div class="customLinks">
-	  <a class="link-plain"
-	     href="../news/news/RSS">
-	  <img src="../++resource++congress2012.skin.images/rss.png" alt="RSS icon" />
-	  Latest news for Neuroinformatics 2011</a>
-	  &nbsp;
-	  <a class="link-plain"
-	     href="http://twitter.com/INCForg"
-	     target="_blank">
-	  <img
-	  src="../++resource++congress2012.skin.images/twitterlogo_16x15.png"
-	  alt="Twitter icon" />
-	  Follow INCF on Twitter</a>
-	</div>
     </tal:main-macro>
 </metal:main>
 

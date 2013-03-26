@@ -18,7 +18,7 @@ if user:
     from_name = object.portal_url.getPortalObject().getProperty('email_from_name')
 
     id = object.getIdentifier()
-    subject = "Your submission to Neuroinformatics 2011 has been accepted (%s)" % id
+    subject = "Your abstract submission has been accepted (%s)" % id
 
     cc = from_email
 

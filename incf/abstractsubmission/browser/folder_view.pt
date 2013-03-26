@@ -44,10 +44,10 @@
             Body text
           </metal:field>
 	  <h3>You need an account on this site to submit an Abstract.</h3>
-	  <p>
-	  If you already have an account, please log in
-	  </p>
 	  <div class="formControls">
+	    <p>
+	    If you already have an account, please log in
+	    </p>
 		  <form id="login"
 			action="login_form"
 			method="post">
