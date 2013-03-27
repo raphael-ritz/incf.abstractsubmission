@@ -259,20 +259,18 @@ class Abstract(base.ATCTContent):
         member = self.portal_membership.getAuthenticatedMember()
         memberId = member.getId()
         memberEmail = member.getProperty('email')
-        
-        base_url = "http://incf.org/portal_membership/getMemberInfo"
-        url = base_url + "?format=json&memberId=%s" % memberId 
-        jsondata = urlopen(url).read()
-        if jsondata:
-            data = json.loads(jsondata)
-            self.country = data.get('country','unknown')
-            data['email'] = memberEmail
-            return [data]
-
-        return [{'firstnames': '(your first names)',
-                 'lastname': '(your last name)',
-                 'email': 'you@somewhere.com',
+        fullname = member.getProperty('fullname')
+        try:
+            firstnames, lastname = fullname.rsplit(None, 1)
+        except ValueError:
+            firstnames = fullname
+            lastname = ''
+            
+        return [{'firstnames': firstnames or '(your first names)',
+                 'lastname': lastname or '(your last name)',
+                 'email': memberEmail,
                  'affiliation': 'Some Great Place',
+                 'country': '',
                  },]
 
     def getTextSize(self):
