@@ -237,9 +237,12 @@ class Abstract(base.ATCTContent):
         return getDisplayList(self, 'country_names')
 
     def Country(self):
-        """Country of first author's affiliation
-        Set by 'defaultAuthor' on creation"""
-        return getattr(self, 'country' , 'unknown')
+        """Country of first author's affiliation"""
+        authors = self.getAuthors()
+        if not authors:
+            return 'unknown'
+        return authors[0].get('country','unset')
+
 
     def getTopics(self):
         """Available scientific categories (set on parent folder)"""
