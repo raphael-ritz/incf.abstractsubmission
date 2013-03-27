@@ -4,6 +4,7 @@ from Products.CMFCore.utils import getToolByName
 
 DEFAULTS = (
     ('Userid', '""'),
+    ('Creation Date', '""'),
     ('Review State', '""'),
     ('Title', '""'),   # academic title
     ('Email', '""'),
@@ -91,6 +92,7 @@ class Export(BrowserView):
         affiliation_index = str(author.get('affiliation_index'))
 
         data['Userid'] = '"%s"' % abstract.Creator() or ''
+        data['Creation Date'] = '"%s"' % abstract.created()
         data['Review State'] =  '"%s"' % abstract.portal_workflow.getInfoFor(abstract, 'review_state')
         data['Email'] = '"%s"' % author.get('email') or ''
         data['First Name'] = '"%s"' % author.get('firstnames') or ''
