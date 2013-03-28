@@ -90,7 +90,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                     default_output_type='text/x-html-safe',
                     allowable_content_types=('text/x-web-intelligent',),                      
                     widget=atapi.TextAreaWidget(label="References",
-                                                rows=10,maxlength=500),
+                                                rows=10),
                     ),         
     atapi.ImageField('image',
                      sizes={'thumb':(80,80),
