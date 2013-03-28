@@ -30,11 +30,18 @@
 	     authors
 	</div>
 	  
-	<div class="affiliations"
-	    tal:define="affiliations python:context.getAuthorAndAffiliationInfo(markup=True)[1]"
-	    tal:content="structure python:',<br />'.join(affiliations)">
-	    affiliations
-	</div>
+	 <dl class="collapsible collapsedOnLoad">
+           <dt class="collapsibleHeader">
+             Affiliations
+           </dt>
+           <dd class="collapsibleContent">
+             <div class="affiliations"
+	        tal:define="affiliations python:context.getAuthorAndAffiliationInfo(markup=True)[1]"
+	        tal:content="structure python:',<br />'.join(affiliations)">
+	       affiliations
+	     </div>
+          </dd>
+        </dl>
 	  
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
