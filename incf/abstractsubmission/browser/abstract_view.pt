@@ -12,6 +12,8 @@
            tal:define="kssClassesView context/@@kss_field_decorator_view;
                        getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                        templateId template/getId;
+                       authors python:context.getAuthorAndAffiliationInfo(markup=True)[0];
+                       affiliations python:context.getAuthorAndAffiliationInfo(markup=True)[1];
                        text here/getAbstract;">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
@@ -24,12 +26,30 @@
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <p class="documentDescription">
-            <metal:field use-macro="python:here.widget('description', mode='view')">
-            Description
-            </metal:field>
-        </p>
-
+	<div class="authors"
+	     tal:content="structure authors">
+	     authors
+	</div>
+	
+        <div class="affiliations"
+	  tal:condition="python:len(affiliations)==1"
+	  tal:content="structure python:affiliations[0]">
+	  affiliation
+	</div>
+	  
+	<dl class="collapsible collapsedOnLoad"
+	  tal:condition="python:len(affiliations)>1">
+          <dt class="collapsibleHeader">
+             Affiliations
+          </dt>
+          <dd class="collapsibleContent">
+             <div class="affiliations"
+	        tal:content="structure python:',<br />'.join(affiliations)">
+	       affiliations
+	     </div>
+         </dd>
+        </dl>
+	  
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
         <p tal:condition="python: not text and is_editable"

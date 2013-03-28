@@ -110,17 +110,20 @@ class FolderView(BrowserView):
         
     # plain text export for the abstract book
     
-    def abstractBookSource(self, separator='\r\n\r\n'):
+    def abstractBookSource(self, separator='\r\n\r\n', ALL=False):
         """Malin and Helena will take it from here"""
 
         out = StringIO()
         abstracts = []
         topics = self.context.getTopics()
-        for topic in topics:
-            abstracts.extend(self.getAbstractsByTopic(topic, 'getIdentifier'))
+        if not topics:
+            abstracts = self.context.portal_catalog(portal_type='Abstract')
+        else:
+            for topic in topics:
+                abstracts.extend(self.getAbstractsByTopic(topic, 'getIdentifier'))
 
         for abstract in abstracts:
-            if abstract.review_state not in ['accepted', 'published']:
+            if not ALL and abstract.review_state not in ['accepted', 'published']:
                 continue
             abstract = abstract.getObject()
             out.write(abstract.abstractBookSource())
