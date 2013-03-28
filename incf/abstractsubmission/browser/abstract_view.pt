@@ -24,12 +24,18 @@
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <p class="documentDescription">
-            <metal:field use-macro="python:here.widget('description', mode='view')">
-            Description
-            </metal:field>
-        </p>
-
+	<div class="authors"
+	     tal:define="authors python:context.getAuthorAndAffiliationInfo(markup=True)[0]"
+	     tal:content="structure authors">
+	     authors
+	</div>
+	  
+	<div class="affiliations"
+	    tal:define="affiliations python:context.getAuthorAndAffiliationInfo(markup=True)[1]"
+	    tal:content="structure python:',<br />'.join(affiliations)">
+	    affiliations
+	</div>
+	  
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
         <p tal:condition="python: not text and is_editable"

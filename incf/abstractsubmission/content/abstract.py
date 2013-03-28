@@ -326,7 +326,7 @@ class Abstract(base.ATCTContent):
             lines.append(l)
         return separator.join(lines)
 
-    def getAuthorAndAffiliationInfo(self):
+    def getAuthorAndAffiliationInfo(self, markup=False):
         """Helper method to cast the author info into something more consumable"""
 
         authors = self.getAuthors()
@@ -346,14 +346,18 @@ class Abstract(base.ATCTContent):
         authors = self.addAffiliationIndex(authors, affiliations)
 
         # several authors, several affiliations
-        authorstring = self.getAuthorsString(authors, addNumbers=True)
-        affiliationlist = self.getAffiliationList(affiliations)
+        authorstring = self.getAuthorsString(authors, markup, addNumbers=True)
+        affiliationlist = self.getAffiliationList(affiliations, markup)
         return authorstring, affiliationlist
 
-    def getAuthorsString(self, authors, addNumbers=False):
+    def getAuthorsString(self, authors, markup, addNumbers=False):
         if addNumbers:
-            authorlist = ["%(firstnames)s %(lastname)s%(affiliation_index)s" % a \
-                          for a in authors]
+            if markup:
+                authorlist = ["%(firstnames)s %(lastname)s<sup>%(affiliation_index)s</sup>" % a \
+                              for a in authors]
+            else:
+                authorlist = ["%(firstnames)s %(lastname)s%(affiliation_index)s" % a \
+                              for a in authors]
         else:
             authorlist = ["%(firstnames)s %(lastname)s" % a for a in authors]
         # the trivial case - one author is handled already
@@ -365,12 +369,12 @@ class Abstract(base.ATCTContent):
     def addAffiliationIndex(self, authors, affiliations=None):
         if affiliations is None:
             affiliations = [a.get('affiliation') for a in authors]
-        index_map = self.getAffiliationList(affiliations, mapping = True)
+        index_map = self.getAffiliationList(affiliations, markup=False, mapping = True)
         for a in authors:
             a['affiliation_index'] = index_map[a.get('affiliation')]
-        return authors   # assuming the change is picked up
+        return authors
 
-    def getAffiliationList(self, affiliations, mapping=False):
+    def getAffiliationList(self, affiliations, markup, mapping=False):
         """Filter out duplicates and add numbers in front.
         If 'mapping' is true, return a dictionary
         'affiliation' -> 'index' instead"""
@@ -382,7 +386,10 @@ class Abstract(base.ATCTContent):
             if a not in seen:
                 seen.append(a)
                 index += 1
-                result.append('%s. %s' % (index, a))
+                if markup:
+                    result.append('<sup>%s</sup>%s' % (index, a))
+                else:
+                    result.append('%s. %s' % (index, a))
                 result_map[a] = index
         return mapping and result_map or result
 
