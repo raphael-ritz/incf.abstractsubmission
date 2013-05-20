@@ -1,15 +1,24 @@
 from StringIO import StringIO
 from Products.Five.browser import BrowserView
+from Products.CMFCore.utils import getToolByName
 from contentratings.interfaces import IUserRating
 
 TEMPLATE = '"%s"'
 
-supported_fields = ['firstnames',
+supported_fields = ['identifier',
+                    'state',
+                    'firstnames',
                     'lastname',
                     'email',
                     'affiliation',
                     'country',
+                    'authors',
                     'title',
+                    'body',
+                    'acknowledgments',
+                    'references',
+                    'imagetag',
+                    'caption',
                     'format',
                     'topic',
                     'session',
@@ -18,6 +27,14 @@ supported_fields = ['firstnames',
                     '#replies',
                     'comments',
                     ]
+
+def getIdentifier(abstract):
+    return abstract.getIdentifier() or ''
+
+def getState(abstract):
+    wft = getToolByName(abstract, 'portal_workflow')
+    return wft.getInfoFor(abstract, 'review_state')
+                        
 
 def getFirstName(abstract):
     return abstract.getAuthors()[0].get('firstnames') or ''
@@ -34,8 +51,26 @@ def getAffiliation(abstract):
 def getCountry(abstract):
     return abstract.Country() or ''
 
+def getAuthors(abstract):
+    return abstract.formatAuthors() or ''
+
 def getTitle(abstract):
     return abstract.Title() or ''
+
+def getBody(abstract):
+    return abstract.getPlainText() or ''
+
+def getAcknowledgments(abstract):
+    return abstract.getAcknowledgments(mimetype="text/plain") or ''
+
+def getReferences(abstract):
+    return abstract.getCitations(mimetype="text/plain") or ''
+
+def getImageTag(abstract):
+    return abstract.tag() or ''
+
+def getCaption(abstract):
+    return abstract.getImageCaption() or ''
 
 def getPresentationFormat(abstract):
     return abstract.getPresentationFormat() or ''
@@ -63,12 +98,20 @@ def getComments(abstract):
 
 
 accessors = {
+    'identifier': getIdentifier,
+    'state': getState,
     'firstnames': getFirstName,
     'lastname': getLastName,
     'email': getEmail,
     'affiliation': getAffiliation,
     'country': getCountry,
+    'authors': getAuthors,
     'title': getTitle,
+    'body': getBody,
+    'acknowledgments': getAcknowledgments,
+    'references': getReferences,
+    'imagetag': getImageTag,
+    'caption': getCaption,
     'format': getPresentationFormat,
     'topic': getTopic,
     'session': getSession,
@@ -82,15 +125,19 @@ accessors = {
 class CSVExport(BrowserView):
     """Methods for the CSV export of a submission folder"""
 
-    def csv_export(self, fields=[], delimiter=',', newline='\r\n'):
+    def csv_export(self, states=None, fields=None, delimiter=',', newline='\r\n'):
         """Main method to be called for the csv export"""
         
         if not fields:
             fields = supported_fields
         out = StringIO()
         out.write(delimiter.join(fields) + newline)
-
+        wft = getToolByName(self.context, 'portal_workflow')
+            
         for abstract in self.context.contentValues():
+            review_state = wft.getInfoFor(abstract, 'review_state')
+            if states and review_state not in states:
+                continue
             values = []
             for field in fields:
                 value = TEMPLATE % accessors[field](abstract)

@@ -81,6 +81,14 @@
 
     <browser:page
 	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="csv_export"
+	class="incf.abstractsubmission.browser.csv_export.CSVExport"
+	attribute="csv_export"
+	permission="cmf.ManagePortal"
+	/>
+
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
         name="export2fin"
 	class="incf.abstractsubmission.browser.export2FIN.Export"
 	attribute="export2fin"
