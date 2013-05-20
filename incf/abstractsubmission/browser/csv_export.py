@@ -35,7 +35,6 @@ def getState(abstract):
     wft = getToolByName(abstract, 'portal_workflow')
     return wft.getInfoFor(abstract, 'review_state')
                         
-
 def getFirstName(abstract):
     return abstract.getAuthors()[0].get('firstnames') or ''
 
@@ -130,9 +129,10 @@ class CSVExport(BrowserView):
         
         if not fields:
             fields = supported_fields
+        wft = getToolByName(self.context, 'portal_workflow')
+
         out = StringIO()
         out.write(delimiter.join(fields) + newline)
-        wft = getToolByName(self.context, 'portal_workflow')
             
         for abstract in self.context.contentValues():
             review_state = wft.getInfoFor(abstract, 'review_state')
