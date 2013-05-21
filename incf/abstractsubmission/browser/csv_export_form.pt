@@ -1,0 +1,106 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+           tal:define="templateId template/getId;
+		       url context/absolute_url;">
+
+        <h1 class="documentFirstHeading">
+            CSV Export
+       </h1>
+
+          <form style="float: left;"
+              action="csv_export"
+              tal:attributes="action python:context.absolute_url()+'/csv_export'"
+              method="post">
+
+              <div class="field">
+                  <label for="filename"
+                         i18n:translate="label_filename">File Name</label>
+                  <div class="formHelp" i18n:translate="help_file_name">
+                      Specify the name of the resulting file
+                  </div>
+
+                  <input type="text"
+                         id="filename"
+		         name="filename"
+                         size="25"
+		         value="abstracts.csv"
+                         />
+              </div>
+		
+            <fieldset style="margin-right: 1em;">
+               <legend i18n:translate="">Review states to include</legend>
+                <ul class="configlets">
+                    <li tal:define="states view/states_vocab;"
+                        tal:repeat="state states">
+                    <tal:state define="state_id python:state[0];
+		                         state_title python:state[1]">
+
+                        <input class="noborder"
+                               type="checkbox"
+                               name="states:list"
+		               checked
+                               tal:attributes="value state_id;
+                                               id state_id;" />
+
+                        <label for="" tal:attributes="for state_id">
+
+                            <tal:block replace="structure context/workflow_icon.png"/>
+
+                            <span tal:replace="state_title">
+                              State Name
+                            </span>
+                       </label>
+                    </tal:state>
+                    </li>
+                </ul>
+            </fieldset>
+
+            <fieldset style="margin-right: 1em;">
+               <legend i18n:translate="">Fields to include</legend>
+                <ul class="configlets">
+                    <li tal:define="fields view/fields_vocab;"
+                        tal:repeat="field fields">
+                    <tal:field define="field_id python:field[0];
+		                       field_title python:field[1]">
+
+                        <input class="noborder"
+                               type="checkbox"
+                               name="fields:list"
+		               checked
+                               tal:attributes="value field_id;
+                                               id field_id;" />
+
+                        <label for="" tal:attributes="for field_id">
+
+                            <tal:block replace="structure context/add_icon.png"/>
+
+                            <span tal:replace="field_title">
+                              Field Name
+                            </span>
+                       </label>
+                    </tal:field>
+                    </li>
+                </ul>		
+            </fieldset>
+
+                <input class="context"
+                       type="submit"
+                       i18n:attributes="value label_export;"
+                       value="Export"
+                       />
+       </form>
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>
+

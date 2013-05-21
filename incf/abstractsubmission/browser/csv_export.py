@@ -5,27 +5,28 @@ from contentratings.interfaces import IUserRating
 
 TEMPLATE = '"%s"'
 
-supported_fields = ['identifier',
-                    'state',
-                    'firstnames',
-                    'lastname',
-                    'email',
-                    'affiliation',
-                    'country',
-                    'authors',
-                    'title',
-                    'body',
-                    'acknowledgments',
-                    'references',
-                    'imagetag',
-                    'caption',
-                    'format',
-                    'topic',
-                    'session',
-                    'url',
-                    'rating',
-                    '#replies',
-                    'comments',
+# (id, label)
+supported_fields = [('identifier', 'Identifier'),
+                    ('state', 'Review state'),
+                    ('firstnames', 'First author: First name(s)'),
+                    ('lastname', 'First author: Last name'),
+                    ('email', 'First author: Email'),
+                    ('affiliation', 'First author: Affiliation'),
+                    ('country', 'First author: Country'),
+                    ('authors', 'Full author list including affiliations'),
+                    ('title', 'Abstract title'),
+                    ('body', 'Main text of abstract'),
+                    ('acknowledgments', 'Acknowledgments'),
+                    ('references', 'References'),
+                    ('imagetag', 'Image tag'),
+                    ('caption', 'Image caption'),
+                    ('format', 'Presentation format'),
+                    ('topic', 'Topic'),
+                    ('session', 'Session'),
+                    ('url', 'Abstract URL'),
+                    ('rating', 'Cummulative rating'),
+                    ('#replies', 'Number of comments'),
+                    ('comments', 'Comments (concatenated)'),
                     ]
 
 def getIdentifier(abstract):
@@ -134,7 +135,7 @@ class CSVExport(BrowserView):
         """Main method to be called for the csv export"""
         
         if fields is None:
-            fields = supported_fields
+            fields = [field[0] for field in supported_fields]
             
         wft = getToolByName(self.context, 'portal_workflow')
 
@@ -168,6 +169,10 @@ class CSVExport(BrowserView):
         for state in wf.states.values():
             vocab.append((state.getId(), state.title))
         return vocab
+
+    def fields_vocab(self):
+        """Vocabulary for the field selection"""
+        return supported_fields
         
 
 def comment_data(abstract):
