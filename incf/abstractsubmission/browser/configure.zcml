@@ -89,6 +89,14 @@
 
     <browser:page
 	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
+        name="states_vocab"
+	class="incf.abstractsubmission.browser.csv_export.CSVExport"
+	attribute="states_vocab"
+	permission="cmf.ManagePortal"
+	/>
+
+    <browser:page
+	for="incf.abstractsubmission.interfaces.ISubmissionFolder"
         name="export2fin"
 	class="incf.abstractsubmission.browser.export2FIN.Export"
 	attribute="export2fin"

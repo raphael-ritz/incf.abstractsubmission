@@ -124,11 +124,18 @@ accessors = {
 class CSVExport(BrowserView):
     """Methods for the CSV export of a submission folder"""
 
-    def csv_export(self, states=None, fields=None, delimiter=',', newline='\r\n'):
+    def csv_export(self,
+                   states=None,
+                   fields=None,
+                   filename='abstracts.csv',
+                   delimiter=',',
+                   newline='\r\n',
+                   ):
         """Main method to be called for the csv export"""
         
-        if not fields:
+        if fields is None:
             fields = supported_fields
+            
         wft = getToolByName(self.context, 'portal_workflow')
 
         out = StringIO()
@@ -148,10 +155,20 @@ class CSVExport(BrowserView):
         out.close()
         self.request.RESPONSE.setHeader('Content-Type', 'application/x-msexcel')
         self.request.RESPONSE.setHeader("Content-Disposition", 
-                                        "inline;filename=abstracts.csv")
+                                        "inline;filename=%s"%filename)
 
         return value
 
+    def states_vocab(self):
+        """Provide vocabulary for the state selection"""
+        wft = getToolByName(self.context, 'portal_workflow')
+        wf_id = wft.getChainForPortalType('Abstract')[0]
+        wf = wft[wf_id]
+        vocab = []
+        for state in wf.states.values():
+            vocab.append((state.getId(), state.title))
+        return vocab
+        
 
 def comment_data(abstract):
     """Helper function returning the number and concatenated text
