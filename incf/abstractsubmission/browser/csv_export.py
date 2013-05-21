@@ -8,13 +8,15 @@ TEMPLATE = '"%s"'
 # (id, label)
 supported_fields = [('identifier', 'Identifier'),
                     ('state', 'Review state'),
+                    ('created', 'Creation date and time'),
+                    ('modified', 'Last modification date and time'),
                     ('firstnames', 'First author: First name(s)'),
                     ('lastname', 'First author: Last name'),
                     ('email', 'First author: Email'),
                     ('affiliation', 'First author: Affiliation'),
                     ('country', 'First author: Country'),
                     ('authors', 'Full author list including affiliations'),
-                    ('title', 'Abstract title'),
+                    ('abstract_title', 'Abstract title'),
                     ('body', 'Main text of abstract'),
                     ('acknowledgments', 'Acknowledgments'),
                     ('references', 'References'),
@@ -35,7 +37,13 @@ def getIdentifier(abstract):
 def getState(abstract):
     wft = getToolByName(abstract, 'portal_workflow')
     return wft.getInfoFor(abstract, 'review_state')
-                        
+
+def getCreated(abstract):
+    return abstract.created().strftime('%Y-%m-%d %H:%M')
+
+def getModified(abstract):
+    return abstract.modified().strftime('%Y-%m-%d %H:%M')
+                    
 def getFirstName(abstract):
     return abstract.getAuthors()[0].get('firstnames') or ''
 
@@ -100,13 +108,15 @@ def getComments(abstract):
 accessors = {
     'identifier': getIdentifier,
     'state': getState,
+    'created': getCreated,
+    'modified': getModified,
     'firstnames': getFirstName,
     'lastname': getLastName,
     'email': getEmail,
     'affiliation': getAffiliation,
     'country': getCountry,
     'authors': getAuthors,
-    'title': getTitle,
+    'abstract_title': getTitle,
     'body': getBody,
     'acknowledgments': getAcknowledgments,
     'references': getReferences,
