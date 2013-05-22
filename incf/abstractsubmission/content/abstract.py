@@ -19,6 +19,7 @@ from Products.CMFCore.permissions import ReviewPortalContent
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base
 from Products.ATContentTypes.content import schemata
+from Products.ATContentTypes.configuration import zconf
 
 from Products.ATExtensions import ateapi
 from Products.ATExtensions.Extensions.utils import getDisplayList
@@ -93,6 +94,7 @@ AbstractSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                                                 rows=10),
                     ),         
     atapi.ImageField('image',
+                     swallowResizeExceptions=zconf.swallowImageResizeExceptions.enable,
                      sizes={'thumb':(80,80),
                             'small':(200,200),
                             'default':(400,400),
@@ -416,7 +418,11 @@ class Abstract(base.ATCTContent):
         image_upload = request.form.get('image_file', None) 
         if image_upload is not None:
             image_upload.seek(0)
-            image = Image.open(image_upload)
+            try:
+                image = Image.open(image_upload)
+            except IOError:  # we are not dealing with an image at all
+                return None
+            print "\n** checkImageFormat: received a %s file ** \n" % image.format
             if image.format.lower() not in SUPPORTED_IMAGE_FORMATS:
                 return "Image format '%s' is not supported. Please consider uploading "\
                     "a JPG, GIF or PNG file." % image.format
