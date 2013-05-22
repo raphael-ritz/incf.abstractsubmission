@@ -422,7 +422,6 @@ class Abstract(base.ATCTContent):
                 image = Image.open(image_upload)
             except IOError:  # we are not dealing with an image at all
                 return None
-            print "\n** checkImageFormat: received a %s file ** \n" % image.format
             if image.format.lower() not in SUPPORTED_IMAGE_FORMATS:
                 return "Image format '%s' is not supported. Please consider uploading "\
                     "a JPG, GIF or PNG file." % image.format
