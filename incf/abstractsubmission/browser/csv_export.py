@@ -183,6 +183,20 @@ class CSVExport(BrowserView):
     def fields_vocab(self):
         """Vocabulary for the field selection"""
         return supported_fields
+
+    def toggleSelection(self, states, fields):
+        """Return a URL specified for bulk (de)selection of
+        states or fields"""
+        base = self.context.absolute_url()
+        base = base + '/csv_export_form'
+        arguments = []
+        if states:
+            arguments.append('states_selected=1')
+        if fields:
+            arguments.append('fields_selected=1')
+        if not arguments:
+            return base
+        return base + '?' + '&'.join(arguments)
         
 
 def comment_data(abstract):
