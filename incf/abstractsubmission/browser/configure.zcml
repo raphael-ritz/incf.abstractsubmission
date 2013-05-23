@@ -111,4 +111,12 @@
 	permission="zope2.View"
 	/>
 
+    <browser:page
+	for="Products.Archetypes.interfaces.IBaseObject"
+        name="json_view"
+	class="incf.abstractsubmission.browser.jsonview.JSONView"
+	attribute="json_view"
+	permission="zope2.View"
+	/>
+
 </configure>
