@@ -10,6 +10,9 @@ from urllib import urlopen
 from StringIO import StringIO
 
 from PIL import Image
+from types import FileType
+from Acquisition import aq_base
+from ZPublisher.HTTPRequest import FileUpload
 
 from zope.interface import implements
 from DateTime import DateTime
@@ -410,7 +413,7 @@ class Abstract(base.ATCTContent):
 
         return separator.join(lines)
 
-    # helper message for sanity checking of the image
+    # helper method for sanity checking of the image
     def checkImageFormat(self, request):
         """Called from 'validate_integrity'. Return a warning phrase if the
         image seems fishy"""
@@ -421,7 +424,23 @@ class Abstract(base.ATCTContent):
             try:
                 image = Image.open(image_upload)
             except IOError:  # we are not dealing with an image at all
-                return None
+                # check if it is empty; copied from
+                # https://github.com/plone/Products.ATContentTypes/blob/master/Products/ATContentTypes/lib/validators.py
+                if isinstance(image_upload, FileUpload) or type(image_upload) is FileType \
+                  or hasattr(aq_base(image_upload), 'tell'):
+                    image_upload.seek(0, 2)  # eof
+                    size = image_upload.tell()
+                    image_upload.seek(0)
+                else:
+                    try:
+                        size = len(image_upload)
+                    except TypeError:
+                        size = 1
+                if size == 0:
+                    return None # empty is OK               
+                return "The file you uploaded is not an image file and will not be "\
+                    "displayed. Please consider uploading a JPG, GIF or PNG file."
+            # if we get to here we have something PIL can handle
             if image.format.lower() not in SUPPORTED_IMAGE_FORMATS:
                 return "Image format '%s' is not supported. Please consider uploading "\
                     "a JPG, GIF or PNG file." % image.format
