@@ -158,7 +158,9 @@ class CSVExport(BrowserView):
                 continue
             values = []
             for field in fields:
-                value = TEMPLATE % accessors[field](abstract)
+                raw = accessors[field](abstract)
+                raw = raw.replace('"', '""')
+                value = TEMPLATE % raw
                 values.append(value)
             out.write(delimiter.join(values) + newline)
             
