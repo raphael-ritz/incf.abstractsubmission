@@ -6,7 +6,9 @@
   <include package="plone.app.contentmenu" />
   <include package="Products.CMFCore" file="permissions.zcml" />
   <!-- -*- extra stuff goes here -*- -->
-
+    <permission
+        id="abstractsubmission.csvexport"
+        title="AbstractSubmission: CSVExport" />
   
     <browser:page
 	for="incf.abstractsubmission.interfaces.IAbstract"
@@ -84,7 +86,7 @@
         name="csv_export_form"
 	template="csv_export_form.pt"
 	class="incf.abstractsubmission.browser.csv_export.CSVExport"
-	permission="cmf.ManagePortal"
+	permission="abstractsubmission.csvexport"
 	/>
 
     <browser:page
@@ -92,7 +94,7 @@
         name="csv_export"
 	class="incf.abstractsubmission.browser.csv_export.CSVExport"
 	attribute="csv_export"
-	permission="cmf.ManagePortal"
+	permission="abstractsubmission.csvexport"
 	/>
 
     <browser:page
@@ -100,7 +102,7 @@
         name="states_vocab"
 	class="incf.abstractsubmission.browser.csv_export.CSVExport"
 	attribute="states_vocab"
-	permission="cmf.ManagePortal"
+	permission="abstractsubmission.csvexport"
 	/>
 
     <browser:page
@@ -113,7 +115,7 @@
 
     <browser:page
 	for="Products.Archetypes.interfaces.IBaseObject"
-        name="json_view"
+	name="json_view"
 	class="incf.abstractsubmission.browser.jsonview.JSONView"
 	attribute="json_view"
 	permission="zope2.View"

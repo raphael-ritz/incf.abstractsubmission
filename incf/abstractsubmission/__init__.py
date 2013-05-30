@@ -13,6 +13,9 @@ from Products.CMFCore import utils
 
 abstractsubmissionMessageFactory = MessageFactory('incf.abstractsubmission')
 
+# enable our custom permissions
+import permissions
+
 # patch CMFDefault.Document to not acquire a UID
 # or CMF Discussion Items will go wild
 from Products.CMFDefault.Document import Document
