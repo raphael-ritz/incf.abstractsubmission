@@ -66,13 +66,13 @@ def getTitle(abstract):
     return abstract.Title() or ''
 
 def getBody(abstract):
-    return abstract.getPlainText() or ''
+    return abstract.getRawAbstract() or ''
 
 def getAcknowledgments(abstract):
-    return abstract.getAcknowledgments(mimetype="text/plain") or ''
+    return abstract.getRawAcknowledgments() or ''
 
 def getReferences(abstract):
-    return abstract.getCitations(mimetype="text/plain") or ''
+    return abstract.getRawCitations() or ''
 
 def getImageTag(abstract):
     return abstract.tag() or ''
