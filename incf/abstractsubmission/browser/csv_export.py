@@ -1,3 +1,4 @@
+from types import UnicodeType
 from StringIO import StringIO
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
@@ -8,6 +9,8 @@ TEMPLATE = '"%s"'
 # (id, label)
 supported_fields = [('identifier', 'Identifier'),
                     ('state', 'Review state'),
+                    ('creator', 'Created by'),
+                    ('creator_email', 'Creator email'),
                     ('created', 'Creation date and time'),
                     ('modified', 'Last modification date and time'),
                     ('firstnames', 'First author: First name(s)'),
@@ -33,6 +36,17 @@ supported_fields = [('identifier', 'Identifier'),
 
 def getIdentifier(abstract):
     return abstract.getIdentifier() or ''
+
+def getCreator(abstract):
+    mt = getToolByName(abstract, 'portal_membership')
+    cid = abstract.Creator()
+    cname = mt.getMemberById(cid).getProperty('fullname') or ''
+    return "%s (%s)" % (cname, cid)
+
+def getCreatorEmail(abstract):
+    mt = getToolByName(abstract, 'portal_membership')
+    cid = abstract.Creator()
+    return mt.getMemberById(cid).getProperty('email') or ''
 
 def getState(abstract):
     wft = getToolByName(abstract, 'portal_workflow')
@@ -108,6 +122,8 @@ def getComments(abstract):
 accessors = {
     'identifier': getIdentifier,
     'state': getState,
+    'creator': getCreator,
+    'creator_email': getCreatorEmail, 
     'created': getCreated,
     'modified': getModified,
     'firstnames': getFirstName,
@@ -160,6 +176,8 @@ class CSVExport(BrowserView):
             for field in fields:
                 raw = accessors[field](abstract)
                 raw = raw.replace('"', '""')
+                if type(raw) is UnicodeType:
+                    raw = raw.encode('utf8')
                 value = TEMPLATE % raw
                 values.append(value)
             out.write(delimiter.join(values) + newline)
